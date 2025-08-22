@@ -43,7 +43,7 @@ const SelectedMove = (props) => {
         const initialAvailableMoves= initialSelectedPokemon?  initialSelectedPokemon.specie.moves: null;
 
 
-        console.log(initialSelectedPokemon);
+        console.log("pokemon: " + initialSelectedPokemon);
 
         setAvailableMoves(initialAvailableMoves);
         setFilteredMoves(initialAvailableMoves);
@@ -149,7 +149,7 @@ const SelectedMove = (props) => {
     };
 
     const handleSave = () =>{
-        console.log(userRoster)
+        console.log("saving the roster: "+ userRoster)
         const data={userRoster: userRoster.toJSON(), enemyRoster: enemyRoster.toJSON()}
         saveARoster(userRoster);
         saveARoster(enemyRoster);
@@ -163,14 +163,11 @@ const SelectedMove = (props) => {
         console.log(move, selectedMove);
     }
 
-    const navBarBehaviourM=[
-        ()=>{handleSave()},
-        ()=>{}
-    ];
+   
 
     return (
         <>
-            <Header navBarBehaviour={navBarBehaviourM}></Header>
+            <Header></Header>
             {selectedPokemon && (
         <div style={{ backgroundColor: "#302B2B", textAlign: "center", minHeight: "100vh", paddingTop: "20px", paddingBottom: "20px" }}>
             <div style={{ textAlign: "center", display: "flex", justifyContent: "center", alignItems: "flex-start" }}>

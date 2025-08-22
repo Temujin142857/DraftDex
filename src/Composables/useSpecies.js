@@ -9,6 +9,7 @@ import {createMoveFromSnapshot, loadMoveFromName} from "./useMoves";
 export let globalSpeciesList={};
 
 export const createSpecieFromJson = async (json) => {
+    if(!json){return null;}
     let moves = json.moves;
     if(!moves){
         moves=[];
@@ -37,7 +38,8 @@ const createSpecieFromAPI=async (json) => {
     let abilities = [];
     for (const ability of json.abilities) {
         const abilityData = await fetchGeneric(ability.ability.url);
-        abilities.push(new Ability(ability.ability.name, abilityData.effect_entries[abilityData.effect_entries.length-1].effect));
+        console.log("ability data gotten from api", abilityData);
+        abilities.push(new Ability(ability.ability.name, abilityData.effect_entries.length ? abilityData.effect_entries[abilityData.effect_entries.length-1].effect : null));
     }
     let learnSet = [];
     let moves=[];

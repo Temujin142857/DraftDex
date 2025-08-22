@@ -121,9 +121,10 @@ export async function saveRoster(roster){
     }
     console.log("saving roster: ", roster);
     await set(ref(useDatabase, 'rosters/' + roster.rosterID), roster.toJSON());
+    console.log("user pre changes: ", gUser);
     addRoster(roster.rosterID);
-    console.log(gUser)
     await set(ref(useDatabase, 'users/'+gUser.name), gUser.rosters);
+    console.log("user: ", gUser);
 }
 
 export async function generateRosterID(roster){
@@ -138,7 +139,7 @@ export async function loadRoster(rosterID){
         console.log("rosterLoaded: " , data);
         return data;
     } catch (error) {
-        console.error("Error loading species:", error);
+        console.error("Error loading species:", error, " RosterID:",rosterID);
     }
 }
 
@@ -148,6 +149,7 @@ export async function loadUserRosters(user){
         const data = await readData("users/"+user.name);
         setUser(new User(user.name, data));
         for (const rosterID of data.split(',')) {
+            console.log("rosterID: ", rosterID);
             let roster=await loadRoster(rosterID);
             rosters.push(roster);
             addRoster(roster)
@@ -162,3 +164,4 @@ export async function loadUserRosters(user){
 export const saveMove = async (move) =>{
     await set(ref(useDatabase, 'moves/' + move.name), move);
 }
+

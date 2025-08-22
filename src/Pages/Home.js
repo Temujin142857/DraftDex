@@ -58,8 +58,8 @@ const Home = (props) => {
 
     const selectRoster = (roster) => {
         let newRostersSelected;
-        if (rostersSelected.includes(roster)) {
-            newRostersSelected = rostersSelected.filter(r => r !== roster);
+        if (rostersSelected?.includes(roster)) {
+            newRostersSelected = rostersSelected?.filter(r => r !== roster);
         } else {
             newRostersSelected = [...rostersSelected, roster];
         }
@@ -92,7 +92,7 @@ const Home = (props) => {
             </h3>
             <ul style={{ columns: '3', marginTop: '5%' }}>
                 {rosters && rosters?.map((roster, index) =>
-                    <li className={rostersSelected.includes(roster) ? 'lii highlighted' : 'lii'}
+                    <li className={rostersSelected?.includes(roster) ? 'lii highlighted' : 'lii'}
                         onClick={() => selectRoster(roster)} key={index}>
                         {roster.name}
                     </li>

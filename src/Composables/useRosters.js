@@ -77,7 +77,7 @@ export const createRosterFromSnapshot = async (snapshot) => {
 }
 
 export const saveARoster=(roster)=>{
-    console.log("roster:", roster);
+    console.log("saving roster, useRosters:", roster);
     for (let i=0; i<roster.species.length; i++){
         roster.species[i] = roster.species[i].name;
     }
