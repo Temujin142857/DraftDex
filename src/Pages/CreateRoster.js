@@ -7,6 +7,7 @@ import Header from "../Components/Header";
 import {loadAllSpecies} from "../Composables/useDatabase.js";
 import {saveARoster} from "../Composables/useRosters";
 import {Roster} from "../DataStructures/Roster";
+import { createRoster } from "../Composables/useRosters";
 
 class CreateRoster extends React.Component {
 
@@ -19,7 +20,7 @@ class CreateRoster extends React.Component {
             species: [],
             slotsSelected: [],
             name: "Roster Name",
-            filteredSpecies: [new Specie("temp")],
+            filteredSpecies: ["temp"],
             searchInput: '',
             roster: new Roster("name")
         }
@@ -28,14 +29,21 @@ class CreateRoster extends React.Component {
     async componentDidMount() {
         loadTeams();
         const speciesL=  await loadAllSpecies();
+        console.log("hi3 ", speciesL)
         this.setState({ filteredSpecies: speciesL });
         this.setState({species: speciesL});
     }
 
-    selectSlot=(specie)=>{
+    selectSlot=async (speciePromise)=>{
+        console.log("adding to speciesSelected:", speciePromise, "isPromise:", speciePromise instanceof Promise);
+        const specie= await speciePromise;
+        console.log("hi4", specie);
+        const roster  = this.state.roster;
+        console.log("hi5", roster);
+        const newRoster=await createRoster(roster.name, [...this.state.speciesSelected, specie], roster.teams, roster.rosterID);
         this.setState((prevState) => ({
             speciesSelected: [...prevState.speciesSelected, specie],
-            roster: new Roster(prevState.name, [...prevState.speciesSelected, specie], prevState.roster.teams, prevState.roster.rosterID)
+            roster: newRoster
         }));
     }
 
@@ -52,12 +60,20 @@ class CreateRoster extends React.Component {
       saveARoster(this.state.roster);
     };
 
-    handleInput = (e) => {
-        console.log("name:", e.target.textContent)
-        this.setState((prevState) => ({
-            roster: new Roster(e.target.textContent, prevState.roster.species, prevState.roster.teams, prevState.roster.rosterID)
-        }));
-    }
+    handleInput = async (e) => {
+    console.log("name:", e.target.textContent);
+
+    const roster  = this.state.roster;
+
+    const newRoster = await createRoster(
+        e.target.textContent,
+        roster.species,
+        roster.teams,
+        roster.rosterID
+    );
+
+    this.setState({ roster: newRoster });
+}
 
     render() {
         const { emptySlots, speciesSelected, species, slotSelected, searchInput, filteredSpecies, roster } = this.state;
@@ -79,7 +95,7 @@ class CreateRoster extends React.Component {
                             {filteredSpecies.map((specie, index) => (
                                 <li className={'i' + ' li'} key={index} onClick={() => this.selectSlot(specie)}
                                     style={{margin: '20px 10px', cursor: 'pointer'}}>
-                                    {specie.name}
+                                    {specie}
                                 </li>
                             ))}
                         </ul>
@@ -89,7 +105,7 @@ class CreateRoster extends React.Component {
                         <ul style={{margin: '50px 0', display: 'grid', gridTemplateColumns: 'auto auto', gap: '20px'}}>
                             {speciesSelected && speciesSelected.map((specie, index) => (
                                 <li key={index} className={'li'} style={{margin: '20px 0'}}>
-                                    {specie.name}
+                                    {specie}
                                 </li>
                             ))}
                         </ul>

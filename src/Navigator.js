@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react'
-import {Roster} from "./DataStructures/Roster";
 
 
 export function NavigateToMatchup({ rostersSelected, path }) {

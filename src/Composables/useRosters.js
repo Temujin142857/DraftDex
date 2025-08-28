@@ -4,18 +4,17 @@ import {Roster} from "../DataStructures/Roster";
 import {loadASpecie} from "./useSpecies";
 import {Pokemon} from "../DataStructures/Pokemon";
 
-export const createRoster = (name, species=[], team=null) => {
-    if (!team && species.length > 6) {
-        team = createTeam('', species.splice(0, 6));
-    } else {
-        team = team || createTeam();
-    }
+export const createRoster = async (name, species=[], teams=[], rosterID) => {
+    console.log("hi2", species)
+    if(!Array.isArray(species))species=[species];
+    for (let i = 0; i < species.length; i++) {
+        if((typeof(species[i]) == "string")){
+            console.log("hi",species[i])
+            species[i]=await loadASpecie(species[i]);
+        }
+    } 
 
-    return {
-        name,
-        species,
-        team
-    };
+    return new Roster(name, species, teams, rosterID);
 };
 
 export const loadARoster=async (rosterID) => {
@@ -42,7 +41,7 @@ export const createShallowRosterFromSnapshot=(snapshot)=>{
     }
     console.log("shallow snapshot: ", snapshot);
 
-    return new Roster(name, speciesList, teams, id);
+    return createRoster(name, speciesList, teams, id);
 }
 
 
@@ -54,7 +53,7 @@ export const createRosterFromSnapshot = async (snapshot) => {
     console.log("SpeciesList being loaded: ",speciesList)
 
     let species = await Promise.all(
-        speciesList.map(speciesName => loadASpecie(speciesName))
+        speciesList.map(specie => loadASpecie(specie.name ? specie.name : specie))
     );
 
     let teams = snapshot.teams;
@@ -80,16 +79,6 @@ export const saveARoster=(roster)=>{
     console.log("saving roster, useRosters:", roster);
     for (let i=0; i<roster.species.length; i++){
         roster.species[i] = roster.species[i].name;
-    }
-    for (let i=0; i<roster.teams.length; i++){
-        for (let j = 0; j < roster.teams[i].pokemons.length; j++) {
-            if(roster.teams[i].pokemons[j].specie.name){
-                roster.teams[i].pokemons[j]=roster.teams[i].pokemons[j].specie.name
-            }else {
-                roster.teams[i].pokemons[j]=roster.teams[i].pokemons[j].specie
-            }
-
-        }
     }
     saveRoster(roster);
 }

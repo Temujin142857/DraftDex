@@ -1,10 +1,13 @@
 import {Team} from "./Team";
 import {Pokemon} from "./Pokemon";
+import { Specie } from "./Specie";
+import { loadASpecie } from "../Composables/useSpecies";
+import { createRoster } from "../Composables/useRosters";
 
 export class Roster{
     constructor(name, species=[], teams=[], rosterID){
         this.name = name;
-        this.species = species;
+        this.species = species;    
         this.teams = teams;
         this.rosterID = rosterID;
         if(species.length > 0&&teams.length === 0){
@@ -30,7 +33,8 @@ export class Roster{
     static fromJSON(json) {
         if(!json){return null}
         const teams = json?.teams.map(teamJson => Team.fromJSON(teamJson));
-        return new Roster(json.name, json.species, teams, json.rosterID);
+        console.log("rosterFromJson: ", json);
+        return createRoster(json.name, json.species, teams, json.rosterID);
     }
 }
 

@@ -5,5 +5,6 @@ export const setUser = (newUser) =>{
 }
 
 export const addRoster=(roster)=>{
-    user.rosters=user.rosters+","+roster;
+    roster=String(roster);
+    if(!roster.includes(roster))user.rosters=user.rosters+","+roster;
 }

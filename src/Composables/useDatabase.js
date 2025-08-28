@@ -68,7 +68,7 @@ export async function loadAllSpecies() {
     try {
         const data = await readData("names");
         console.log("data:" + data);
-        const speciesArray = data.split(",").map(s => new Specie(s));
+        const speciesArray = data.split(",");
         return speciesArray;  // Return the array of Specie objects
     } catch (error) {
         console.error("Error loading species:", error);
@@ -120,6 +120,7 @@ export async function saveRoster(roster){
         await generateRosterID(roster);
     }
     console.log("saving roster: ", roster);
+    console.log("roster as json: ", roster.toJSON())
     await set(ref(useDatabase, 'rosters/' + roster.rosterID), roster.toJSON());
     console.log("user pre changes: ", gUser);
     addRoster(roster.rosterID);
@@ -152,7 +153,7 @@ export async function loadUserRosters(user){
             console.log("rosterID: ", rosterID);
             let roster=await loadRoster(rosterID);
             rosters.push(roster);
-            addRoster(roster)
+            addRoster(rosterID);
         }
         return rosters;
     }catch (error) {
