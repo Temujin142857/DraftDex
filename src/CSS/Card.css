@@ -1,20 +1,20 @@
 .card {
-    background-color: lightgray; /* Background color */
-    border-radius: 15px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for a card effect */
-    padding-right: 20px;
-    padding-left: 30px;
-    padding-top: 0;
-    margin-left: 20px; /* Margin outside the card */
-    min-width: 40vw; /* Allow the card to take full width */
-    min-height: 0;
-    padding-bottom: 0;
+  background-color: lightgray; /* Background color */
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for a card effect */
+  padding-right: 20px;
+  padding-left: 30px;
+  padding-top: 0;
+  margin-left: 20px; /* Margin outside the card */
+  min-width: 40vw; /* Allow the card to take full width */
+  min-height: 0;
+  padding-bottom: 0;
 }
 
 .text {
-    margin: 10px 0; /* Margin for text headers */
+  margin: 10px 0; /* Margin for text headers */
 }
 
 .liii {
-    margin-bottom: 10px; /* Margin for list items */
+  margin-bottom: 10px; /* Margin for list items */
 }

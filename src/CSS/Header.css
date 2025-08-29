@@ -1,58 +1,60 @@
 nav {
-    background-color: #333;
-    padding: 1rem;
+  background-color: #333;
+  padding: 1rem;
 }
 
 .ulh {
-    list-style: none;
-    display: flex;
-    justify-content: space-around;
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
 }
 
 .lih {
-    margin: 0 1rem;
+  margin: 0 1rem;
 }
 
 a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
 }
 
 a.active {
-    background-color: #555;
-    border-radius: 4px;
+  background-color: #555;
+  border-radius: 4px;
 }
 
 a.disabled {
-    color: grey;
-    pointer-events: none;
-    cursor: default;
+  color: grey;
+  pointer-events: none;
+  cursor: default;
 }
 
-
-.nav-link, .nav-button {
-    color: white;
-    background: none;
-    border: none;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 1rem;
+.nav-link,
+.nav-button {
+  color: white;
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
-.nav-link:hover, .nav-button:hover {
-    background-color: #444;
+.nav-link:hover,
+.nav-button:hover {
+  background-color: #444;
 }
 
-.nav-link.active, .nav-button.active {
-    background-color: #555;
-    border-radius: 4px;
+.nav-link.active,
+.nav-button.active {
+  background-color: #555;
+  border-radius: 4px;
 }
 
-
-.nav-link.disabled, .nav-button.disabled {
-    color: grey;
-    pointer-events: none;
-    cursor: default;
+.nav-link.disabled,
+.nav-button.disabled {
+  color: grey;
+  pointer-events: none;
+  cursor: default;
 }

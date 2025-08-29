@@ -1,6 +1,6 @@
 export class Ability {
-    constructor(name, description) {
-        this.name = name;
-        this.description = description;
-    }
+  constructor(name, description) {
+    this.name = name;
+    this.description = description;
+  }
 }

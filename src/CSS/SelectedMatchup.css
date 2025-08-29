@@ -1,71 +1,69 @@
 .container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 .vertical-line {
-    width: 3px; /* Line width */
-    height: 100%; /* Line height */
-    background-color: black; /* Line color */
+  width: 3px; /* Line width */
+  height: 100%; /* Line height */
+  background-color: black; /* Line color */
 }
 
 .horizontal-line {
-    width: 100%; /* Line width */
-    height: 3px; /* Line height */
-    background-color: black; /* Line color */
-    top: 50%; /* Center it vertically */
-    margin: 0;
-    padding: 0;
+  width: 100%; /* Line width */
+  height: 3px; /* Line height */
+  background-color: black; /* Line color */
+  top: 50%; /* Center it vertically */
+  margin: 0;
+  padding: 0;
 }
 
-.liii{
-    text-align: center;
-    color: lightgray;
-    list-style-type: none;
-    cursor: pointer;
+.liii {
+  text-align: center;
+  color: lightgray;
+  list-style-type: none;
+  cursor: pointer;
 }
 
 .selectedPokemon {
-    color: white;
-    border: 2px solid #FF0000;
-    border-radius: 5px;
+  color: white;
+  border: 2px solid #ff0000;
+  border-radius: 5px;
 }
 
-.nameList{
-    min-width: 100px;
-    font-size: large;
-    padding-left: 10px;
+.nameList {
+  min-width: 100px;
+  font-size: large;
+  padding-left: 10px;
 }
 
-
-.liii:hover{
-    color: white;
+.liii:hover {
+  color: white;
 }
 
 .square-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 10px; /* Adjust as needed */
-    width: 300px; /* Adjust width as needed */
-    height: 300px; /* Adjust height as needed */
-    margin-top: 30px;
-    margin-left: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px; /* Adjust as needed */
+  width: 300px; /* Adjust width as needed */
+  height: 300px; /* Adjust height as needed */
+  margin-top: 30px;
+  margin-left: 30px;
 }
 
 .square-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ccc; /* Optional background color */
-    border: 1px solid #999; /* Optional border */
-    cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ccc; /* Optional background color */
+  border: 1px solid #999; /* Optional border */
+  cursor: pointer;
 }
 
-
-.text{
-    color: lightgray;
+.text {
+  color: lightgray;
 }
 
-.hli{
-    margin-bottom: 13px;
+.hli {
+  margin-bottom: 13px;
 }

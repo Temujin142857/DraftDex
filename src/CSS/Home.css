@@ -1,29 +1,29 @@
-.lii{
-    margin-bottom: 100px;
-    margin-top: 10px;
-    color: lightgray;
-    list-style-type: none;
-    cursor: pointer;
+.lii {
+  margin-bottom: 100px;
+  margin-top: 10px;
+  color: lightgray;
+  list-style-type: none;
+  cursor: pointer;
 }
 
-.lii:hover{
-    color: white;
+.lii:hover {
+  color: white;
 }
 
-.link{
-    color: lightgray;
-    text-decoration: none;
+.link {
+  color: lightgray;
+  text-decoration: none;
 }
 
-.link:hover{
-    text-decoration: underline;
-    color: white;
+.link:hover {
+  text-decoration: underline;
+  color: white;
 }
 
 .highlighted {
-    outline: 2px solid yellow; /* Or any other desired style */
+  outline: 2px solid yellow; /* Or any other desired style */
 }
 
-.text{
-    color: lightgray;
+.text {
+  color: lightgray;
 }
