@@ -7,8 +7,26 @@ import SelectedMatchup from './Pages/SelectedMatchup';
 import CreateRoster from './Pages/CreateRoster';
 import SelectedMove from './Pages/SelectedMove';
 import Social from './Pages/Social';
+import { loadRostersFromUser, setRosters } from './Composables/useRosters';
+import {User} from "./DataStructures/User";
 
 const App = () => {
+    const defaultUser=new User("Ash");
+
+    const setupData = async () => {
+
+        try {
+            const newRosters = await loadRostersFromUser(defaultUser);
+            const resolvedRosters = await Promise.all(newRosters);
+            setRosters(resolvedRosters);
+            console.log("Rosters:", resolvedRosters);
+        } catch (error) {
+            console.error('Error loading rosters:', error);
+        }
+    };
+
+   setupData(); // Call the async function
+
   return (
       <BrowserRouter>
           <Routes>

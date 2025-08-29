@@ -148,6 +148,7 @@ export async function loadUserRosters(user){
     try {
         let rosters=[];
         const data = await readData("users/"+user.name);
+        console.log("hi", user, data)
         setUser(new User(user.name, data));
         for (const rosterID of data.split(',')) {
             console.log("rosterID: ", rosterID);

@@ -2,19 +2,14 @@ import React, {useEffect, useState} from "react";
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 //import { Rosters } from "../Composables/useRosters.js"
 import "../CSS/Home.css"
-import {Specie} from "../DataStructures/Specie";
 import {Roster} from "../DataStructures/Roster";
-import {Move} from "../DataStructures/Move";
-import {Ability} from "../DataStructures/Ability";
+import {globalRosters} from "../Composables/useRosters";
 import {NavigateForwards} from "../Navigator";
-import * as state from "../Composables/useRosters";
 import Header from "../Components/Header";
 import {getL, swapLNG} from "../Composables/useLexicon";
-import {User} from "../DataStructures/User";
-import {loadUserRosters} from "../Composables/useDatabase";
-import {loadRostersFromUser} from "../Composables/useRosters";
 
-const defaultUser=new User("Ash");
+
+
 
 const Home = (props) => {
     const location = useLocation();
@@ -37,23 +32,8 @@ const Home = (props) => {
     const [data, setData]=useState([])
 
     useEffect(() => {
-        const setupData = async () => {
-            try {
-                console.log("loadingHome", newRoster);
-                const newRosters = await loadRostersFromUser(defaultUser);
-
-                const resolvedRosters = await Promise.all(newRosters);
-
-                setRosters(resolvedRosters);
-                setEmptySlots(slots - resolvedRosters.length);
-
-                console.log("Rosters:", resolvedRosters);
-            } catch (error) {
-                console.error('Error loading rosters:', error);
-            }
-        };
-
-        setupData(); // Call the async function
+        setRosters(globalRosters);
+        setEmptySlots(slots - globalRosters.length);
     }, []);
 
     const selectRoster = (roster) => {
@@ -72,11 +52,6 @@ const Home = (props) => {
             // Assuming there's some navigation logic here
         }
         setRostersSelected(newRostersSelected);
-    };
-
-    const goToSocial = () => {
-        setShouldNavigate(true);
-        setPath('/social');
     };
 
     const languageSwap = () => {
@@ -102,10 +77,7 @@ const Home = (props) => {
                         <Link to="/createRoster" className='link'>{text["newRoster"]}</Link>
                     </li>
                 ))}
-            </ul>
-            <h2 className='text link' onClick={goToSocial}>
-                {text["socialTab"]}
-            </h2>
+            </ul>            
             {shouldNavigate && <NavigateForwards data={data} path={path} />}
         </div>
     );

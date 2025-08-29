@@ -4,6 +4,12 @@ import {Roster} from "../DataStructures/Roster";
 import {loadASpecie} from "./useSpecies";
 import {Pokemon} from "../DataStructures/Pokemon";
 
+export let globalRosters = [];
+
+export const setRosters=(newRosters)=>{
+    globalRosters=newRosters;
+}
+
 export const createRoster = async (name, species=[], teams=[], rosterID) => {
     console.log("hi2", species)
     if(!Array.isArray(species))species=[species];
