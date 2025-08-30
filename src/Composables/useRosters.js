@@ -73,7 +73,6 @@ export const loadRostersFromUser = async (user, isShallow) => {
     if (!roster) continue;
     rosters.push(createRosterFromSnapshot(roster, isShallow));
   }
-  console.log("hi3", rosters)
   return rosters;
 };
 
@@ -89,9 +88,7 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
       ),
     );
     if(teams){
-    console.log("team: ", teams)
     for (let i = 0; i < teams.length; i++) {
-      console.log("hi")
       teams[i] = createTeamFromSnapshot(teams[i]);
       const team = teams[i];
       for (let i = 0; i < team.pokemons.length; i++) {
@@ -156,7 +153,6 @@ export const addDefaultTeam = (roster) => {
     for (let i = 0; i < 6&&i<roster.species.length; i++) {
       pokemons.push(createPokemon(roster.species[i]));
     }
-    console.log("adding team", pokemons)
     roster.teams=[new Team('team1', pokemons)];
   }
 }

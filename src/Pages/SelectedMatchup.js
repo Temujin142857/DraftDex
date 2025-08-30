@@ -80,7 +80,6 @@ const SelectedMatchup = () => {
           !(globalUserRoster.teams.length > 0) ||
           !(globalUserRoster.teams[0].pokemons?.length > 0)
         ) {
-          console.log("hi2")
           addDefaultTeam(globalUserRoster);
         }         
         if (
