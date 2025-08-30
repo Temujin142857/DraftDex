@@ -10,8 +10,9 @@ import "../CSS/SelectedMove.css";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Components/Header";
-import { saveARoster, rosterToJSON, rosterFromJSON } from "../Composables/useRosters";
-import { pokemonFromJSON } from "../Composables/usePokemon";
+import { saveARoster, rosterToJSON, rosterFromJSON, globalUserRoster, globalEnemyRoster } from "../Composables/useRosters";
+import { globalPokemonToExamine, pokemonFromJSON } from "../Composables/usePokemon";
+import { globalMoveToExamine } from "../Composables/useMoves";
 
 
 const SelectedMove = (props) => {
@@ -34,15 +35,12 @@ const SelectedMove = (props) => {
   const [enemyRoster, setEnemyRoster] = useState(null);
 
   useEffect(() => {
-    console.log("onLoad", state);
 
-    const initialSelectedMove = state && state.data ? state.data.move : null;
-    const initialSelectedPokemon =
-      state && state.data ? pokemonFromJSON(state.data.pokemon) : [];
-    const initialUserRoster =
-      state && state.data ? rosterFromJSON(state.data.userRoster) : [];
-    const initialEnemyRoster =
-      state && state.data ? rosterFromJSON(state.data.enemyRoster) : [];
+    const initialSelectedMove = globalMoveToExamine;
+    const initialSelectedPokemon = globalPokemonToExamine;
+    console.log("pokemon: ", initialSelectedPokemon);
+    const initialUserRoster = globalUserRoster;
+    const initialEnemyRoster =globalEnemyRoster;
     const initialMovesSelected = initialSelectedPokemon
       ? initialSelectedPokemon.moves
       : null;
@@ -50,7 +48,7 @@ const SelectedMove = (props) => {
       ? initialSelectedPokemon.specie.moves
       : null;
 
-    console.log("pokemon: " + initialSelectedPokemon);
+    
 
     setAvailableMoves(initialAvailableMoves);
     setFilteredMoves(initialAvailableMoves);

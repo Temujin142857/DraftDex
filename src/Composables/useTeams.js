@@ -23,6 +23,7 @@ export const addPokemon = (team, pokemonToAdd) => {
 };
 
 export const replacePokemon = (team, pokemonToReplace, newPokemon) => {
+  console.log("replacing pokemon", pokemonToReplace, newPokemon)
   if (
     team.pokemons.some(
       (pokemon) => pokemon.specie.name === pokemonToReplace.specie.name,

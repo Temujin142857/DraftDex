@@ -3,6 +3,12 @@ import { Specie } from "../DataStructures/Specie";
 import { globalSpeciesList } from "./useSpecies";
 
 
+export let globalPokemonToExamine;
+
+export const setGlobalPokemonToExamine=(newPokemon)=>{
+  globalPokemonToExamine=newPokemon;
+};
+
 const defaultSpecie=new Specie(
     "Bulbasaur",
     null,

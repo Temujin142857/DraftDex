@@ -4,6 +4,10 @@ import { fetchMove } from "./usePokeAPI";
 import { Move } from "../DataStructures/Move";
 
 export let moves = {};
+export let globalMoveToExamine;
+export const setGlobalMoveToExamine=(move)=>{
+  globalMoveToExamine=move;
+}
 
 export const loadMoveFromName = async (name) => {
   if (moves[name]) {

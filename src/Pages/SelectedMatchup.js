@@ -24,7 +24,9 @@ import {
   addDefaultTeam
 } from "../Composables/useRosters";
 import { Ability } from "../DataStructures/Ability";
-import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON, defaultPokemon } from "../Composables/usePokemon.js";
+import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON, defaultPokemon, createPokemon, jsonFromPartialObject, setGlobalPokemonToExamine } from "../Composables/usePokemon.js";
+import { replacePokemon } from "../Composables/useTeams.js";
+import { setGlobalMoveToExamine } from "../Composables/useMoves.js";
 
 const SelectedMatchup = () => {
   const location = useLocation();
@@ -131,36 +133,29 @@ const SelectedMatchup = () => {
   };
 
   const selectMove = (user, move) => {
-    const data = {
-      move: move,
-      pokemon: user
-        ? Pokemon.jsonFromPartialObject(selectedUserPokemon)
-        : Pokemon.jsonFromPartialObject(selectedEnemyPokemon),
-      userRoster: rosterToJSON(userRoster),
-      enemyRoster: rosterToJSON(enemyRoster),
-    };
-    setData(data);
+    console.log("user",user)
+    setGlobalPokemonToExamine(user);
+    setGlobalMoveToExamine(move);
     setPath("/selectedMatchup/selectedMove");
     setNavigate(true);
   };
 
   const selectSpecie = (user, specie) => {
-    const pokemonToAdd = new Pokemon(specie);
+    const pokemonToAdd = createPokemon(specie);
     if (user) {
       const alreadyExists = userRoster.teams[0].pokemons.some(
         (pokemon) => pokemon.specie.name === pokemonToAdd.specie.name,
       );
       if (!alreadyExists) {
-        userRoster.teams[0].replacePokemon(selectedUserPokemon, pokemonToAdd);
+        replacePokemon(userRoster.teams[0],selectedUserPokemon, pokemonToAdd);
         setSelectedUserPokemon(pokemonToAdd);
-        console.log(userRoster.teams[0].pokemons);
       }
     } else {
       const alreadyExists = enemyRoster.teams[0].pokemons.some(
         (pokemon) => pokemon.specie.name === pokemonToAdd.specie.name,
       );
       if (!alreadyExists) {
-        enemyRoster.teams[0].replacePokemon(selectedEnemyPokemon, pokemonToAdd);
+        replacePokemon(enemyRoster.teams[0],selectedEnemyPokemon, pokemonToAdd);
         setSelectedEnemyPokemon(pokemonToAdd);
       }
     }
@@ -252,7 +247,6 @@ const SelectedMatchup = () => {
   }
 
   const navBarBehaviourM = [
-    () => {},
     () => {
       selectMove(true, selectedUserPokemon.moves[0]);
     },
@@ -462,28 +456,28 @@ const SelectedMatchup = () => {
                     <MoveItem
                       move={selectedUserPokemon.moves[0]}
                       onClick={() => {
-                        selectMove(true, selectedUserPokemon.moves[0]);
+                        selectMove(selectedUserPokemon, selectedUserPokemon.moves[0]);
                       }}
                       user={true}
                     />
                     <MoveItem
                       move={selectedUserPokemon.moves[1]}
                       onClick={() => {
-                        selectMove(true, selectedUserPokemon.moves[1]);
+                        selectMove(selectedUserPokemon, selectedUserPokemon.moves[1]);
                       }}
                       user={true}
                     />
                     <MoveItem
                       move={selectedUserPokemon.moves[2]}
                       onClick={() => {
-                        selectMove(true, selectedUserPokemon.moves[2]);
+                        selectMove(selectedUserPokemon, selectedUserPokemon.moves[2]);
                       }}
                       user={true}
                     />
                     <MoveItem
                       move={selectedUserPokemon.moves[3]}
                       onClick={() => {
-                        selectMove(true, selectedUserPokemon.moves[3]);
+                        selectMove(selectedUserPokemon, selectedUserPokemon.moves[3]);
                       }}
                       user={true}
                     />
@@ -607,28 +601,28 @@ const SelectedMatchup = () => {
                     <MoveItem
                       move={selectedEnemyPokemon.moves[0]}
                       onClick={() => {
-                        selectMove(false, selectedEnemyPokemon.moves[0]);
+                        selectMove(selectedEnemyPokemon, selectedEnemyPokemon.moves[0]);
                       }}
                       user={false}
                     />
                     <MoveItem
                       move={selectedEnemyPokemon.moves[1]}
                       onClick={() => {
-                        selectMove(false, selectedEnemyPokemon.moves[1]);
+                        selectMove(selectedEnemyPokemon, selectedEnemyPokemon.moves[1]);
                       }}
                       user={false}
                     />
                     <MoveItem
                       move={selectedEnemyPokemon.moves[2]}
                       onClick={() => {
-                        selectMove(false, selectedEnemyPokemon.moves[2]);
+                        selectMove(selectedEnemyPokemon, selectedEnemyPokemon.moves[2]);
                       }}
                       user={false}
                     />
                     <MoveItem
                       move={selectedEnemyPokemon.moves[3]}
                       onClick={() => {
-                        selectMove(false, selectedEnemyPokemon.moves[3]);
+                        selectMove(selectedEnemyPokemon, selectedEnemyPokemon.moves[3]);
                       }}
                       user={false}
                     />

@@ -94,7 +94,7 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
       for (let i = 0; i < team.pokemons.length; i++) {
         if (typeof team.pokemons[i] == "string") {
           const specie = species.find((s) => s.name === team.pokemons[i]);
-          team.pokemons[i] = new Pokemon(specie);
+          team.pokemons[i] = createPokemon(specie);
         } else {
           team.pokemons[i].specie = species.find(
             (s) => s.name === team.pokemons[i].specie,
