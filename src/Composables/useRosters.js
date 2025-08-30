@@ -11,6 +11,7 @@ import { loadASpecie } from "./useSpecies";
 import { Pokemon } from "../DataStructures/Pokemon";
 import { Team } from "../DataStructures/Team.js";
 import { Specie } from "../DataStructures/Specie.js";
+import { createPokemon } from "./usePokemon.js";
 
 
 export let globalRosters = [];
@@ -45,7 +46,7 @@ export const saveGlobalTemporaryRoster = async ()=>{
 export const createRoster = async (
   name,
   species = [],
-  teams = new Team('team1'),
+  teams = [],
   rosterID,
   isShallow = true,
 ) => {
@@ -72,6 +73,7 @@ export const loadRostersFromUser = async (user, isShallow) => {
     if (!roster) continue;
     rosters.push(createRosterFromSnapshot(roster, isShallow));
   }
+  console.log("hi3", rosters)
   return rosters;
 };
 
@@ -86,8 +88,10 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
         loadASpecie(specie.name ? specie.name : specie),
       ),
     );
-
+    if(teams){
+    console.log("team: ", teams)
     for (let i = 0; i < teams.length; i++) {
+      console.log("hi")
       teams[i] = createTeamFromSnapshot(teams[i]);
       const team = teams[i];
       for (let i = 0; i < team.pokemons.length; i++) {
@@ -101,6 +105,7 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
         }
       }
     }
+  } 
   }
 
   return createRoster(name, speciesList, teams, id, isShallow);
@@ -146,11 +151,12 @@ export const rosterFromJSON = (json) => {
 };
 
 export const addDefaultTeam = (roster) => {
-  if(roster.species.length > 0&&roster.teams.length === 0){
+  if(roster.species.length > 0){
     const pokemons =[];
     for (let i = 0; i < 6&&i<roster.species.length; i++) {
-      pokemons.push(new Pokemon(roster.species[i]));
+      pokemons.push(createPokemon(roster.species[i]));
     }
+    console.log("adding team", pokemons)
     roster.teams=[new Team('team1', pokemons)];
   }
 }

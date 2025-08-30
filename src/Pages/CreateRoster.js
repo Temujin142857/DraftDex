@@ -58,7 +58,7 @@ class CreateRoster extends React.Component {
   handleSearchInputChange = (event) => {
     const searchInput = event.target.value.toLowerCase();
     const filteredSpecies = this.state.species.filter((specie) =>
-      specie.name.toLowerCase().includes(searchInput),
+      specie.toLowerCase().includes(searchInput),
     );
     this.setState({ searchInput, filteredSpecies });
   };

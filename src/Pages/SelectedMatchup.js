@@ -59,6 +59,7 @@ const SelectedMatchup = () => {
 
   useEffect(() => {
     const fetchRosters = async () => {
+      console.log("shallow rosters: ", globalUserRoster)
       try {
         if (globalUserRoster.isShallow) {
           setGlobalUserRoster(
@@ -70,27 +71,29 @@ const SelectedMatchup = () => {
             await loadARoster(globalEnemyRoster.rosterID, false),
           );
         }
-        console.log(await loadARoster(globalEnemyRoster.rosterID, false));
+        console.log("initial rosters:", globalUserRoster, globalEnemyRoster);
 
         setUserRoster(globalUserRoster);
         setEnemyRoster(globalEnemyRoster);
 
         if (
           !(globalUserRoster.teams.length > 0) ||
-          !(globalUserRoster.teams[0]?.pokemons.length > 0)
+          !(globalUserRoster.teams[0].pokemons?.length > 0)
         ) {
+          console.log("hi2")
           addDefaultTeam(globalUserRoster);
         }         
         if (
           !(globalEnemyRoster.teams.length > 0) ||
-          !(globalEnemyRoster.teams[0].pokemons.length > 0)
+          !(globalEnemyRoster.teams[0].pokemons?.length > 0)
         ) {
+          console.log("hi2e")
           addDefaultTeam(globalEnemyRoster);
         }
+        console.log("setting selectedPokemon", globalUserRoster.teams[0].pokemons[0], globalEnemyRoster.teams[0].pokemons[0]);
         setSelectedUserPokemon(globalUserRoster.teams[0].pokemons[0]);
         setSelectedEnemyPokemon(globalEnemyRoster.teams[0].pokemons[0]);
         setIsLoading(false);
-        console.log("finished loading", globalUserRoster, globalEnemyRoster, selectedUserPokemon, selectedEnemyPokemon);
       } catch (error) {
         console.error("Error loading rosters:", error);
         setIsLoading(false);

@@ -7,9 +7,12 @@ const defaultSpecie=new Specie(
     "Bulbasaur",
     null,
     [45,49,49,65,65,45],
-    [],
-    [],
-    [],
+    ['razor-wind', 'swords-dance', 'cut', 'bind', 'vine-whip', 'headbutt', 'tackle', 'body-slam', 'take-down', 'double-edge', 'growl', 'strength', 'mega-drain', 'leech-seed', 'growth', 'razor-leaf', 'solar-beam', 'poison-powder', 'sleep-powder', 'petal-dance', 'string-shot', 'toxic', 'rage', 'mimic', 'double-team', 'defense-curl', 'light-screen', 'reflect', 'bide', 'sludge', 'skull-bash', 'amnesia', 'flash', 'rest', 'substitute', 'snore', 'curse', 'protect', 'sludge-bomb', 'mud-slap', 'outrage', 'giga-drain', 'endure', 'charm', 'false-swipe', 'swagger', 'fury-cutter', 'attract', 'sleep-talk', 'return', 'frustration', 'safeguard', 'sweet-scent', 'synthesis', 'hidden-power', 'sunny-day', 'rock-smash', 'facade', 'nature-power', 'helping-hand', 'ingrain', 'knock-off', 'secret-power', 'weather-ball', 'grass-whistle', 'bullet-seed', 'magical-leaf', 'natural-gift', 'worry-seed', 'seed-bomb', 'energy-ball', 'leaf-storm', 'power-whip', 'captivate', 'grass-knot', 'venoshock', 'acid-spray', 'round', 'echoed-voice', 'grass-pledge', 'work-up', 'grassy-terrain', 'confide', 'grassy-glide', 'tera-blast', 'trailblaze'],
+    [ {name: 'razor-wind', power: 80, accuracy: 100, secondaryEffects: "Inflicts regular damage.  User's critical hit rate…ing.\n\nThis move cannot be selected by sleep talk.", targets: "all-opponents", type:"normal"},
+      {name: 'swords-dance', power: 0, accuracy: 100, secondaryEffects: "Raises the user's Attack by two stages.", targets: 'user', type: "nromal"},
+      {name: 'cut', power: 50, accuracy: 95, secondaryEffects: 'Inflicts regular damage.', targets: 'selected-pokemon', type: "normal"},
+      {name: 'bind', power: 15, accuracy: 85, secondaryEffects: 'Inflicts regular damage.  For the next 2–5 turns, … 3 hits per use.\n\nrapid spin cancels this effect.', targets: 'selected-pokemon', type: "normal"}],
+    ['grass', 'poison'],
     1,
     [{name: "overgrow", description: "Wenn ein Pokémon mit dieser Fähigkeit nur noch 1/3 seiner maximalen hp oder weniger hat, werden all seine grass Attacken verstärkt, so dass sie 1,5× so viel regular damage anrichten wie sonst."}, {name: "chlorophyll", description: "This Pokémon's Speed is doubled during strong sunlight.This bonus does not count as a stat modifier."}],
     69,);
@@ -17,7 +20,7 @@ const defaultSpecie=new Specie(
 export const createPokemon = (
   specie = defaultSpecie,
   moves = [],
-  ability = null,
+  ability,
   nature = "Serious",
   evs = [0, 0, 0, 0, 0, 0],
   ivs = [31, 31, 31, 31, 31, 31],
@@ -50,6 +53,7 @@ export const createPokemon = (
   }
   return pokemon;
 };
+
 
 export const createPokemonFromSnapshot = (snapshot) => {
   // Implement logic to create a Pokemon from a snapshot
@@ -217,10 +221,4 @@ export const jsonFromPartialObject = (object) => {
 };
 
 
-const createDefaultPokemon =()=>{
-  const moves=[defaultSpecie.moves[0],defaultSpecie.moves[1],defaultSpecie.moves[2],defaultSpecie.moves[3]];
-  return createPokemon(defaultSpecie, moves, defaultSpecie.abilities[0]);
-
-}
-
-export const defaultPokemon=createDefaultPokemon();
+export const defaultPokemon=createPokemon();
