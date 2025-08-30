@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 //import { Rosters } from "../Composables/useRosters.js"
 import "../CSS/Home.css";
 import { Roster } from "../DataStructures/Roster";
-import { globalRosters, rosterToJSON } from "../Composables/useRosters";
+import { globalRosters, globalUserRoster, rosterToJSON, setGlobalEnemyRoster, setGlobalUserRoster } from "../Composables/useRosters";
 import { NavigateForwards } from "../Navigator";
 import Header from "../Components/Header";
 import { getL, swapLNG } from "../Composables/useLexicon";
@@ -43,14 +43,8 @@ const Home = (props) => {
     }
 
     if (newRostersSelected.length === 2) {
-      console.log(
-        "Navigating to selected matchup with roster: ",
-        newRostersSelected,
-      );
-      setData({
-        userRoster: rosterToJSON(newRostersSelected[0]),
-        enemyRoster: rosterToJSON(newRostersSelected[1]),
-      });
+      setGlobalUserRoster(newRostersSelected[0]);
+      setGlobalEnemyRoster(newRostersSelected[1]);
       setShouldNavigate(true);
       setPath("/selectedMatchup");
       // Assuming there's some navigation logic here

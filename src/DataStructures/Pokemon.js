@@ -1,6 +1,3 @@
-import { Specie } from "./Specie";
-import { globalSpeciesList } from "../Composables/useSpecies";
-
 export class Pokemon {
   constructor(
     specie = null,

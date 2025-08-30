@@ -2,7 +2,7 @@ import { Team } from "./Team";
 import { Pokemon } from "./Pokemon";
 
 export class Roster {
-  constructor(name, species = [], teams = [], rosterID) {
+  constructor(name, species = [], teams = [], rosterID, isShallow=true) {
     this.name = name;
     this.species = species;
     this.teams = teams;
@@ -14,6 +14,6 @@ export class Roster {
       }
       this.teams = [new Team("team1", pokemons)];
     }
-    this.isShallow = true;
+    this.isShallow = isShallow;
   }
 }

@@ -45,7 +45,7 @@ export const saveGlobalTemporaryRoster = async ()=>{
 export const createRoster = async (
   name,
   species = [],
-  teams = [],
+  teams = new Team('team1'),
   rosterID,
   isShallow = true,
 ) => {
@@ -58,13 +58,6 @@ export const createRoster = async (
       }
     }
   }
-  if(newSpecies.length > 0&&teams.length === 0){
-            const pokemons =[];
-            for (let i = 0; i < 6&&i<newSpecies.length; i++) {
-                pokemons.push(new Pokemon(newSpecies[i]));
-            }
-            teams=[new Team('team1', pokemons)];
-        }
   return new Roster(name, newSpecies, teams, rosterID, isShallow);
 };
 
@@ -87,7 +80,6 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
   let id = snapshot.rosterID;
   let speciesList = snapshot.speciesList || snapshot.species;
   let teams = snapshot.teams;
-
   if (!isShallow) {
     let species = await Promise.all(
       speciesList.map((specie) =>
@@ -152,3 +144,13 @@ export const rosterFromJSON = (json) => {
   const teams = json?.teams.map((teamJson) => teamFromJSON(teamJson));
   return createRoster(json.name, json.species, teams, json.rosterID);
 };
+
+export const addDefaultTeam = (roster) => {
+  if(roster.species.length > 0&&roster.teams.length === 0){
+    const pokemons =[];
+    for (let i = 0; i < 6&&i<roster.species.length; i++) {
+      pokemons.push(new Pokemon(roster.species[i]));
+    }
+    roster.teams=[new Team('team1', pokemons)];
+  }
+}

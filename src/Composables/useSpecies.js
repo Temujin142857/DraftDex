@@ -121,3 +121,16 @@ const validateSpecie = (specie) => {
     specie.number
   );
 };
+
+/** 
+export const defaultSpecie=new Specie(
+    "Bulbasaur",
+    null,
+    [45,49,49,65,65,45],
+    learnSet,
+    moves = [],
+    types,
+    1,
+    [{name: "overgrow", description: "Wenn ein Pokémon mit dieser Fähigkeit nur noch 1/3 seiner maximalen hp oder weniger hat, werden all seine grass Attacken verstärkt, so dass sie 1,5× so viel regular damage anrichten wie sonst."}, {name: "chlorophyll", description: "This Pokémon's Speed is doubled during strong sunlight.This bonus does not count as a stat modifier."}],
+    69,);
+    */

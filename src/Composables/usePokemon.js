@@ -2,13 +2,25 @@ import { Pokemon } from "../DataStructures/Pokemon";
 import { Specie } from "../DataStructures/Specie";
 import { globalSpeciesList } from "./useSpecies";
 
+
+const defaultSpecie=new Specie(
+    "Bulbasaur",
+    null,
+    [45,49,49,65,65,45],
+    [],
+    [],
+    [],
+    1,
+    [{name: "overgrow", description: "Wenn ein Pokémon mit dieser Fähigkeit nur noch 1/3 seiner maximalen hp oder weniger hat, werden all seine grass Attacken verstärkt, so dass sie 1,5× so viel regular damage anrichten wie sonst."}, {name: "chlorophyll", description: "This Pokémon's Speed is doubled during strong sunlight.This bonus does not count as a stat modifier."}],
+    69,);
+
 export const createPokemon = (
-  specie = null,
-  nature = "Serious",
+  specie = defaultSpecie,
   moves = [],
+  ability = null,
+  nature = "Serious",
   evs = [0, 0, 0, 0, 0, 0],
   ivs = [31, 31, 31, 31, 31, 31],
-  ability = null,
   item = null,
   level = 100,
 ) => {
@@ -25,7 +37,7 @@ export const createPokemon = (
 
   if (pokemon.specie instanceof Specie && pokemon.specie.baseStats) {
     for (let i = 0; i < 6; i++) {
-      pokemon.recalculateStat(i);
+      recalculateStat(pokemon, i);
     }
     if (moves.length === 0 && specie.moves) {
       for (let i = 0; i < 4 && i < specie.moves.length; i++) {
@@ -203,3 +215,12 @@ export const jsonFromPartialObject = (object) => {
     level: object.level,
   };
 };
+
+
+const createDefaultPokemon =()=>{
+  const moves=[defaultSpecie.moves[0],defaultSpecie.moves[1],defaultSpecie.moves[2],defaultSpecie.moves[3]];
+  return createPokemon(defaultSpecie, moves, defaultSpecie.abilities[0]);
+
+}
+
+export const defaultPokemon=createDefaultPokemon();

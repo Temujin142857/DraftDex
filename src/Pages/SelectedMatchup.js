@@ -20,10 +20,11 @@ import {
   setGlobalEnemyRoster,
   setGlobalUserRoster,
   globalUserRoster,
-  rosterToJSON
+  rosterToJSON,
+  addDefaultTeam
 } from "../Composables/useRosters";
 import { Ability } from "../DataStructures/Ability";
-import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON } from "../Composables/usePokemon.js";
+import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON, defaultPokemon } from "../Composables/usePokemon.js";
 
 const SelectedMatchup = () => {
   const location = useLocation();
@@ -34,8 +35,8 @@ const SelectedMatchup = () => {
   const [path, setPath] = useState("");
   const [userRoster, setUserRoster] = useState(null);
   const [enemyRoster, setEnemyRoster] = useState(null);
-  const [selectedUserPokemon, setSelectedUserPokemon] = useState(null);
-  const [selectedEnemyPokemon, setSelectedEnemyPokemon] = useState(null);
+  const [selectedUserPokemon, setSelectedUserPokemon] = useState(defaultPokemon);
+  const [selectedEnemyPokemon, setSelectedEnemyPokemon] = useState(defaultPokemon);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleNatureChange = (user, selectedOption) => {
@@ -69,24 +70,27 @@ const SelectedMatchup = () => {
             await loadARoster(globalEnemyRoster.rosterID, false),
           );
         }
+        console.log(await loadARoster(globalEnemyRoster.rosterID, false));
 
         setUserRoster(globalUserRoster);
         setEnemyRoster(globalEnemyRoster);
 
         if (
-          globalUserRoster.teams?.length > 0 &&
-          globalUserRoster.teams[0]?.pokemons?.length > 0
+          !(globalUserRoster.teams.length > 0) ||
+          !(globalUserRoster.teams[0]?.pokemons.length > 0)
         ) {
-          setSelectedUserPokemon(globalUserRoster.teams[0].pokemons[0]);
-        }
+          addDefaultTeam(globalUserRoster);
+        }         
         if (
-          globalEnemyRoster.teams.length > 0 &&
-          globalEnemyRoster.teams[0].pokemons.length > 0
+          !(globalEnemyRoster.teams.length > 0) ||
+          !(globalEnemyRoster.teams[0].pokemons.length > 0)
         ) {
-          setSelectedEnemyPokemon(globalEnemyRoster.teams[0].pokemons[0]);
+          addDefaultTeam(globalEnemyRoster);
         }
+        setSelectedUserPokemon(globalUserRoster.teams[0].pokemons[0]);
+        setSelectedEnemyPokemon(globalEnemyRoster.teams[0].pokemons[0]);
         setIsLoading(false);
-        console.log("finished loading", globalUserRoster, globalEnemyRoster);
+        console.log("finished loading", globalUserRoster, globalEnemyRoster, selectedUserPokemon, selectedEnemyPokemon);
       } catch (error) {
         console.error("Error loading rosters:", error);
         setIsLoading(false);
@@ -255,6 +259,9 @@ const SelectedMatchup = () => {
   if (isLoading) {
     return <div>Loading...</div>; // Show a loading message or spinner
   }
+
+
+  
 
   return (
     <div>
