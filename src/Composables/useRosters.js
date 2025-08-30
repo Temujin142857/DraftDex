@@ -8,42 +8,49 @@ import {
 import { Roster } from "../DataStructures/Roster";
 import { loadASpecie } from "./useSpecies";
 import { Pokemon } from "../DataStructures/Pokemon";
+import { Team } from "../DataStructures/Team.js";
 
 export let globalRosters = [];
 
-export let globalUserRoster=0;
-export let globalEnemyRoster=1;
+export let globalUserRoster = 0;
+export let globalEnemyRoster = 1;
+
+export let globalTemporaryRoster;
 
 export const setRosters = (newRosters) => {
   globalRosters = newRosters;
 };
 
-export const setGlobalUserRoster= (newRoster)=>{
-  globalUserRoster=newRoster;
+export const setGlobalUserRoster = (newRoster) => {
+  globalUserRoster = newRoster;
 };
 
-export const setGlobalEnemyRoster= (newRoster)=>{
-  globalEnemyRoster=newRoster;
-} 
+export const setGlobalEnemyRoster = (newRoster) => {
+  globalEnemyRoster = newRoster;
+};
+
+export const setGlobalTemporaryRoster = (newRoster) => {
+  globalTemporaryRoster = newRoster;
+};
 
 export const createRoster = async (
   name,
   species = [],
-  teams = [], 
+  teams = [],
   rosterID,
-  isShallow=true,
+  isShallow = true,
 ) => {
-  console.log("hi2", species);
-  if(!isShallow){
+  console.log("hi2", species, isShallow);
+  if (!isShallow) {
     if (!Array.isArray(species)) species = [species];
     for (let i = 0; i < species.length; i++) {
       if (typeof species[i] == "string") {
         console.log("hi", species[i]);
         species[i] = await loadASpecie(species[i]);
-      } 
+      }
     }
   }
-
+  console.log("hi8", species, isShallow);
   return new Roster(name, species, teams, rosterID, isShallow);
 };
 
@@ -67,7 +74,7 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
   let speciesList = snapshot.speciesList || snapshot.species;
   let teams = snapshot.teams;
 
-  if(!isShallow){
+  if (!isShallow) {
     let species = await Promise.all(
       speciesList.map((specie) =>
         loadASpecie(specie.name ? specie.name : specie),
@@ -93,12 +100,12 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
   return createRoster(name, speciesList, teams, id, false);
 };
 
-export const saveARoster = (roster) => {
+export const saveARoster = async (roster) => {
   console.log("saving roster, useRosters:", roster);
   for (let i = 0; i < roster.species.length; i++) {
     roster.species[i] = roster.species[i].name;
   }
-  saveRoster(roster);
+  await saveRoster(roster);
 };
 
 export const updateRoster = (roster) => {
@@ -111,4 +118,23 @@ export const updateRoster = (roster) => {
     }
   }
   saveRoster(roster);
+};
+
+export const rosterToJSON = (roster) => {
+  console.log("turning myslef into a json: ", roster);
+  return {
+    rosterID: roster.rosterID,
+    name: roster.name,
+    species: roster.species,
+    teams: roster.teams.map((team) => pokemonToJSON(team)),
+  };
+};
+
+export const fromJSON = (json) => {
+  if (!json) {
+    return null;
+  }
+  const teams = json?.teams.map((teamJson) => Team.fromJSON(teamJson));
+  console.log("rosterFromJson: ", json);
+  return createRoster(json.name, json.species, teams, json.rosterID);
 };

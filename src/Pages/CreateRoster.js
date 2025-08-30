@@ -7,7 +7,12 @@ import Header from "../Components/Header";
 import { loadAllSpecies } from "../Composables/useDatabase.js";
 import { saveARoster } from "../Composables/useRosters";
 import { Roster } from "../DataStructures/Roster";
-import { createRoster } from "../Composables/useRosters";
+import {
+  createRoster,
+  setGlobalTemporaryRoster,
+  globalTemporaryRoster,
+  rosterToJSON
+} from "../Composables/useRosters";
 
 class CreateRoster extends React.Component {
   constructor(props) {
@@ -43,18 +48,20 @@ class CreateRoster extends React.Component {
     const specie = await speciePromise;
     console.log("hi4", specie);
     const roster = this.state.roster;
-    console.log("hi5", roster);
+    console.log("hi before added", roster);
     const newRoster = await createRoster(
       roster.name,
       [...this.state.speciesSelected, specie],
       roster.teams,
       roster.rosterID,
-      true
+      true,
     );
     this.setState((prevState) => ({
       speciesSelected: [...prevState.speciesSelected, specie],
       roster: newRoster,
     }));
+    setGlobalTemporaryRoster(newRoster);
+    console.log("hi after added: ", newRoster);
   };
 
   handleSearchInputChange = (event) => {
@@ -66,8 +73,8 @@ class CreateRoster extends React.Component {
   };
 
   saveRoster = async () => {
-    await generateRosterID(this.state.roster);
-    saveARoster(this.state.roster);
+    await generateRosterID(globalTemporaryRoster);
+    saveARoster(globalTemporaryRoster);
   };
 
   handleInput = async (e) => {
@@ -80,10 +87,11 @@ class CreateRoster extends React.Component {
       roster.species,
       roster.teams,
       roster.rosterID,
-      true
+      true,
     );
 
     this.setState({ roster: newRoster });
+    setGlobalTemporaryRoster(newRoster);
   };
 
   render() {
@@ -190,7 +198,7 @@ class CreateRoster extends React.Component {
         <div onClick={this.saveRoster}>
           <Link
             to="/"
-            state={roster.toJSON()}
+            state={rosterToJSON(roster)}
             className={"link"}
             style={{
               display: "block",

@@ -1,5 +1,4 @@
 // App.js
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
@@ -9,9 +8,11 @@ import SelectedMove from "./Pages/SelectedMove";
 import Social from "./Pages/Social";
 import { loadRostersFromUser, setRosters } from "./Composables/useRosters";
 import { User } from "./DataStructures/User";
+import { useState } from "react";
 
 const App = () => {
   const defaultUser = new User("Ash");
+  const [isReady, setIsReady] = useState(false);
 
   const setupData = async () => {
     try {
@@ -19,12 +20,17 @@ const App = () => {
       const resolvedRosters = await Promise.all(newRosters);
       setRosters(resolvedRosters);
       console.log("Rosters:", resolvedRosters);
+      setIsReady(true);
     } catch (error) {
       console.error("Error loading rosters:", error);
     }
   };
 
   setupData(); // Call the async function
+
+  if (!isReady) {
+    return <div>Loading...</div>; // You can replace this with a spinner or splash screen
+  }
 
   return (
     <BrowserRouter>

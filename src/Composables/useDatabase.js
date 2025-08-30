@@ -3,9 +3,10 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { createPokemonFromSnapshot } from "../DataStructures/Pokemon.js";
 import { Specie } from "../DataStructures/Specie.js";
-import { createTeamsFromSnapshot } from "../DataStructures/Team.js";
+import { createTeamsFromSnapshot } from "./useTeams";
 import { addRoster, setUser, user as gUser } from "./useUser(lol)";
 import { User } from "../DataStructures/User";
+import { rosterToJSON } from "./useRosters.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -114,8 +115,8 @@ export async function saveRoster(roster) {
     await generateRosterID(roster);
   }
   console.log("saving roster: ", roster);
-  console.log("roster as json: ", roster.toJSON());
-  await set(ref(useDatabase, "rosters/" + roster.rosterID), roster.toJSON());
+  console.log("roster as json: ", rosterToJSON(roster));
+  await set(ref(useDatabase, "rosters/" + roster.rosterID), rosterToJSON(roster));
   console.log("user pre changes: ", gUser);
   addRoster(roster.rosterID);
   await set(ref(useDatabase, "users/" + gUser.name), gUser.rosters);

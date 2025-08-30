@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
+import { rosterToJSON } from "./Composables/useRosters";
 
 export function NavigateToMatchup({ rostersSelected, path }) {
   const navigate = useNavigate();
-  const param = [rostersSelected[0].toJSON(), rostersSelected[1].toJSON()];
+  const param = [rosterToJSON(rostersSelected[0]), rosterToJSON(rostersSelected[1])];
   useEffect(() => {
     navigate(path, { state: { param } });
   }, [navigate, path, rostersSelected]);

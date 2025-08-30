@@ -14,10 +14,16 @@ import AbilitySelect from "../Components/AbilitySelect";
 import { calculateDamage } from "../Composables/useDamage";
 import Header from "../Components/Header";
 import { loadRoster } from "../Composables/useDatabase";
-import { loadARoster, globalEnemyRoster, globalEnemyRoster, setGlobalEnemyRoster, setGlobalUserRoster, globalUserRoster } from "../Composables/useRosters";
+import {
+  loadARoster,
+  globalEnemyRoster,
+  setGlobalEnemyRoster,
+  setGlobalUserRoster,
+  globalUserRoster,
+  rosterToJSON
+} from "../Composables/useRosters";
 import { Ability } from "../DataStructures/Ability";
-import { setRosters } from "../Composables/useRosters";
-
+import { setIv, setEv, setNature } from "../Composables/usePokemon.js";
 
 const SelectedMatchup = () => {
   const location = useLocation();
@@ -35,14 +41,12 @@ const SelectedMatchup = () => {
   const handleNatureChange = (user, selectedOption) => {
     // Assuming selectedUserPokemon and selectedEnemyPokemon are objects with a method to update nature
     if (user && selectedUserPokemon) {
-      const updatedUserPokemon = Pokemon.fromJSON(selectedUserPokemon.toJSON());
-      updatedUserPokemon.setNature(selectedOption.value);
+      const updatedUserPokemon = fromJSON(toJSONPokemon(selectedUserPokemon));
+      setNature(updatedUserPokemon, selectedOption.value);
       setSelectedUserPokemon(updatedUserPokemon);
     } else if (!user && selectedEnemyPokemon) {
-      const updatedEnemyPokemon = Pokemon.fromJSON(
-        selectedEnemyPokemon.toJSON(),
-      );
-      updatedEnemyPokemon.setNature(selectedOption.value);
+      const updatedEnemyPokemon = fromJSON(pokemonToJSON(selectedEnemyPokemon));
+      setNature(updatedEnemyPokemon, selectedOption.value);
       setSelectedEnemyPokemon(updatedEnemyPokemon);
     }
 
@@ -55,12 +59,16 @@ const SelectedMatchup = () => {
   useEffect(() => {
     const fetchRosters = async () => {
       try {
-        if(globalUserRoster.isShallow){
-          setGlobalUserRoster(await loadARoster(initialUserRoster.rosterID, false));
-        }  
-        if(globalEnemyRoster.isShallow){
-          setGlobalEnemyRoster(await loadARoster(initialEnemyRoster.rosterID, false));
-        }      
+        if (globalUserRoster.isShallow) {
+          setGlobalUserRoster(
+            await loadARoster(initialUserRoster.rosterID, false),
+          );
+        }
+        if (globalEnemyRoster.isShallow) {
+          setGlobalEnemyRoster(
+            await loadARoster(initialEnemyRoster.rosterID, false),
+          );
+        }
 
         setUserRoster(globalUserRoster);
         setEnemyRoster(globalEnemyRoster);
@@ -92,12 +100,12 @@ const SelectedMatchup = () => {
     if (user) {
       const newIVs = [...selectedUserPokemon.ivs];
       newIVs[index] = parseInt(event.target.value, 10);
-      selectedUserPokemon.setIv(newIVs[index], index);
+      setIv(selectedUserPokemon, newIVs[index], index);
       setSelectedUserPokemon((prevState) => ({ ...prevState, ivs: newIVs }));
     } else {
       const newIVs = [...selectedEnemyPokemon.ivs];
       newIVs[index] = parseInt(event.target.value, 10);
-      selectedEnemyPokemon.setIv(newIVs[index], index);
+      setIv(selectedEnemyPokemon, newIVs[index], index);
       setSelectedEnemyPokemon((prevState) => ({ ...prevState, ivs: newIVs }));
     }
   };
@@ -106,12 +114,12 @@ const SelectedMatchup = () => {
     if (user) {
       const newEVs = [...selectedUserPokemon.evs];
       newEVs[index] = parseInt(event.target.value, 10);
-      selectedUserPokemon.setEv(newEVs[index], index);
+      setEv(selectedUserPokemon, newEVs[index], index);
       setSelectedUserPokemon((prevState) => ({ ...prevState, evs: newEVs }));
     } else {
       const newEVs = [...selectedEnemyPokemon.evs];
       newEVs[index] = parseInt(event.target.value, 10);
-      selectedEnemyPokemon.setEv(newEVs[index], index);
+      setEv(selectedEnemyPokemon, newEVs[index], index);
       setSelectedEnemyPokemon((prevState) => ({ ...prevState, evs: newEVs }));
     }
   };
@@ -122,8 +130,8 @@ const SelectedMatchup = () => {
       pokemon: user
         ? Pokemon.jsonFromPartialObject(selectedUserPokemon)
         : Pokemon.jsonFromPartialObject(selectedEnemyPokemon),
-      userRoster: userRoster.toJSON(),
-      enemyRoster: enemyRoster.toJSON(),
+      userRoster: rosterToJSON(userRoster),
+      enemyRoster: rosterToJSON(enemyRoster),
     };
     setData(data);
     setPath("/selectedMatchup/selectedMove");

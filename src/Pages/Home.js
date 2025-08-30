@@ -3,10 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 //import { Rosters } from "../Composables/useRosters.js"
 import "../CSS/Home.css";
 import { Roster } from "../DataStructures/Roster";
-import { globalRosters } from "../Composables/useRosters";
+import { globalRosters, rosterToJSON } from "../Composables/useRosters";
 import { NavigateForwards } from "../Navigator";
 import Header from "../Components/Header";
 import { getL, swapLNG } from "../Composables/useLexicon";
+import { fromJSON } from "../Composables/useRosters";
 
 const Home = (props) => {
   const location = useLocation();
@@ -26,10 +27,11 @@ const Home = (props) => {
     newRoster: "+ New Roster",
     socialTab: "Social Tab",
   });
-  const [newRoster, setNewRoster] = useState(Roster.fromJSON(passedData));
+  const [newRoster, setNewRoster] = useState(fromJSON(passedData));
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    console.log("rosters: ", globalRosters);
     setRosters(globalRosters);
     setEmptySlots(slots - globalRosters.length);
   }, []);
@@ -48,8 +50,8 @@ const Home = (props) => {
         newRostersSelected,
       );
       setData({
-        userRoster: newRostersSelected[0].toJSON(),
-        enemyRoster: newRostersSelected[1].toJSON(),
+        userRoster: rosterToJSON(newRostersSelected[0]),
+        enemyRoster: rosterToJSON(newRostersSelected[1]),
       });
       setShouldNavigate(true);
       setPath("/selectedMatchup");
