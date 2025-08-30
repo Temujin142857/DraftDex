@@ -49,6 +49,7 @@ class CreateRoster extends React.Component {
       [...this.state.speciesSelected, specie],
       roster.teams,
       roster.rosterID,
+      true
     );
     this.setState((prevState) => ({
       speciesSelected: [...prevState.speciesSelected, specie],
@@ -79,6 +80,7 @@ class CreateRoster extends React.Component {
       roster.species,
       roster.teams,
       roster.rosterID,
+      true
     );
 
     this.setState({ roster: newRoster });

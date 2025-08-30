@@ -14,9 +14,10 @@ import AbilitySelect from "../Components/AbilitySelect";
 import { calculateDamage } from "../Composables/useDamage";
 import Header from "../Components/Header";
 import { loadRoster } from "../Composables/useDatabase";
-import { loadARoster } from "../Composables/useRosters";
+import { loadARoster, globalEnemyRoster, globalEnemyRoster, setGlobalEnemyRoster, setGlobalUserRoster, globalUserRoster } from "../Composables/useRosters";
 import { Ability } from "../DataStructures/Ability";
 import { setRosters } from "../Composables/useRosters";
+
 
 const SelectedMatchup = () => {
   const location = useLocation();
@@ -54,34 +55,30 @@ const SelectedMatchup = () => {
   useEffect(() => {
     const fetchRosters = async () => {
       try {
-        const initialUserRoster =
-          state && state.data ? Roster.fromJSON(state.data.userRoster) : [];
-        const initialEnemyRoster =
-          state && state.data ? Roster.fromJSON(state.data.enemyRoster) : [];
+        if(globalUserRoster.isShallow){
+          setGlobalUserRoster(await loadARoster(initialUserRoster.rosterID, false));
+        }  
+        if(globalEnemyRoster.isShallow){
+          setGlobalEnemyRoster(await loadARoster(initialEnemyRoster.rosterID, false));
+        }      
 
-        console.log("data in matchup", state);
-        console.log("inital user: ", initialUserRoster);
-
-        const fullUserRoster = await loadARoster(initialUserRoster.rosterID);
-        const fullEnemyRoster = await loadARoster(initialEnemyRoster.rosterID);
-
-        setUserRoster(fullUserRoster);
-        setEnemyRoster(fullEnemyRoster);
+        setUserRoster(globalUserRoster);
+        setEnemyRoster(globalEnemyRoster);
 
         if (
-          fullUserRoster.teams.length > 0 &&
-          fullUserRoster.teams[0].pokemons.length > 0
+          globalUserRoster.teams.length > 0 &&
+          globalUserRoster.teams[0].pokemons.length > 0
         ) {
-          setSelectedUserPokemon(fullUserRoster.teams[0].pokemons[0]);
+          setSelectedUserPokemon(globalUserRoster.teams[0].pokemons[0]);
         }
         if (
-          fullEnemyRoster.teams.length > 0 &&
-          fullEnemyRoster.teams[0].pokemons.length > 0
+          globalEnemyRoster.teams.length > 0 &&
+          globalEnemyRoster.teams[0].pokemons.length > 0
         ) {
-          setSelectedEnemyPokemon(fullEnemyRoster.teams[0].pokemons[0]);
+          setSelectedEnemyPokemon(globalEnemyRoster.teams[0].pokemons[0]);
         }
         setIsLoading(false);
-        console.log("finished loading", fullUserRoster, fullEnemyRoster);
+        console.log("finished loading", globalUserRoster, globalEnemyRoster);
       } catch (error) {
         console.error("Error loading rosters:", error);
         setIsLoading(false);

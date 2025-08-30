@@ -17,6 +17,7 @@ export class Roster {
       }
       this.teams = [new Team("team1", pokemons)];
     }
+    this.isShallow=true;
   }
 
   toJSON() {

@@ -11,86 +11,86 @@ import { Pokemon } from "../DataStructures/Pokemon";
 
 export let globalRosters = [];
 
+export let globalUserRoster=0;
+export let globalEnemyRoster=1;
+
 export const setRosters = (newRosters) => {
   globalRosters = newRosters;
 };
 
+export const setGlobalUserRoster= (newRoster)=>{
+  globalUserRoster=newRoster;
+};
+
+export const setGlobalEnemyRoster= (newRoster)=>{
+  globalEnemyRoster=newRoster;
+} 
+
 export const createRoster = async (
   name,
   species = [],
-  teams = [],
+  teams = [], 
   rosterID,
+  isShallow=true,
 ) => {
   console.log("hi2", species);
-  if (!Array.isArray(species)) species = [species];
-  for (let i = 0; i < species.length; i++) {
-    if (typeof species[i] == "string") {
-      console.log("hi", species[i]);
-      species[i] = await loadASpecie(species[i]);
+  if(!isShallow){
+    if (!Array.isArray(species)) species = [species];
+    for (let i = 0; i < species.length; i++) {
+      if (typeof species[i] == "string") {
+        console.log("hi", species[i]);
+        species[i] = await loadASpecie(species[i]);
+      } 
     }
   }
 
-  return new Roster(name, species, teams, rosterID);
+  return new Roster(name, species, teams, rosterID, isShallow);
 };
 
-export const loadARoster = async (rosterID) => {
-  return createRosterFromSnapshot(await loadRoster(rosterID));
+export const loadARoster = async (rosterID, isShallow) => {
+  return createRosterFromSnapshot(await loadRoster(rosterID), isShallow);
 };
 
-export const loadRostersFromUser = async (user) => {
+export const loadRostersFromUser = async (user, isShallow) => {
   const rawRosters = await loadUserRosters(user);
   let rosters = [];
   for (const roster of rawRosters) {
     if (!roster) continue;
-    rosters.push(createShallowRosterFromSnapshot(roster));
+    rosters.push(createRosterFromSnapshot(roster, isShallow));
   }
   return rosters;
 };
 
-export const createShallowRosterFromSnapshot = (snapshot) => {
+export const createRosterFromSnapshot = async (snapshot, isShallow) => {
   let name = snapshot.name;
   let id = snapshot.rosterID;
   let speciesList = snapshot.speciesList || snapshot.species;
   let teams = snapshot.teams;
-  for (let i = 0; i < teams.length; i++) {
-    teams[i] = createTeamFromSnapshot(teams[i]);
-  }
-  console.log("shallow snapshot: ", snapshot);
 
-  return createRoster(name, speciesList, teams, id);
-};
+  if(!isShallow){
+    let species = await Promise.all(
+      speciesList.map((specie) =>
+        loadASpecie(specie.name ? specie.name : specie),
+      ),
+    );
 
-export const createRosterFromSnapshot = async (snapshot) => {
-  let name = snapshot.name;
-  let id = snapshot.rosterID;
-  let speciesList = snapshot.speciesList || snapshot.species;
-  console.log("snapshot: ", snapshot);
-  console.log("SpeciesList being loaded: ", speciesList);
-
-  let species = await Promise.all(
-    speciesList.map((specie) =>
-      loadASpecie(specie.name ? specie.name : specie),
-    ),
-  );
-
-  let teams = snapshot.teams;
-
-  for (let i = 0; i < teams.length; i++) {
-    teams[i] = createTeamFromSnapshot(teams[i]);
-    const team = teams[i];
-    for (let i = 0; i < team.pokemons.length; i++) {
-      if (typeof team.pokemons[i] == "string") {
-        const specie = species.find((s) => s.name === team.pokemons[i]);
-        team.pokemons[i] = new Pokemon(specie);
-      } else {
-        team.pokemons[i].specie = species.find(
-          (s) => s.name === team.pokemons[i].specie,
-        );
+    for (let i = 0; i < teams.length; i++) {
+      teams[i] = createTeamFromSnapshot(teams[i]);
+      const team = teams[i];
+      for (let i = 0; i < team.pokemons.length; i++) {
+        if (typeof team.pokemons[i] == "string") {
+          const specie = species.find((s) => s.name === team.pokemons[i]);
+          team.pokemons[i] = new Pokemon(specie);
+        } else {
+          team.pokemons[i].specie = species.find(
+            (s) => s.name === team.pokemons[i].specie,
+          );
+        }
       }
     }
   }
 
-  return new Roster(name, species, teams, id);
+  return createRoster(name, speciesList, teams, id, false);
 };
 
 export const saveARoster = (roster) => {

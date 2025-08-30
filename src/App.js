@@ -15,7 +15,7 @@ const App = () => {
 
   const setupData = async () => {
     try {
-      const newRosters = await loadRostersFromUser(defaultUser);
+      const newRosters = await loadRostersFromUser(defaultUser, true);
       const resolvedRosters = await Promise.all(newRosters);
       setRosters(resolvedRosters);
       console.log("Rosters:", resolvedRosters);
