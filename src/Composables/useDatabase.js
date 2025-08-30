@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
-import { createPokemonFromSnapshot } from "../DataStructures/Pokemon.js";
+import { createPokemonFromSnapshot } from "./usePokemon.js";
 import { Specie } from "../DataStructures/Specie.js";
 import { createTeamsFromSnapshot } from "./useTeams";
 import { addRoster, setUser, user as gUser } from "./useUser(lol)";
@@ -67,7 +67,6 @@ export async function loadSpecie(speciesName) {
 export async function loadAllSpecies() {
   try {
     const data = await readData("names");
-    console.log("data:" + data);
     const speciesArray = data.split(",");
     return speciesArray; // Return the array of Specie objects
   } catch (error) {
@@ -98,7 +97,6 @@ export function uploadSpeciesList() {}
 export async function loadRosterPointer() {
   try {
     const data = await readData("rosterPointer");
-    console.log("rosterID: " + data);
     return data;
   } catch (error) {
     console.error("Error loading species:", error);
@@ -115,12 +113,9 @@ export async function saveRoster(roster) {
     await generateRosterID(roster);
   }
   console.log("saving roster: ", roster);
-  console.log("roster as json: ", rosterToJSON(roster));
   await set(ref(useDatabase, "rosters/" + roster.rosterID), rosterToJSON(roster));
-  console.log("user pre changes: ", gUser);
   addRoster(roster.rosterID);
   await set(ref(useDatabase, "users/" + gUser.name), gUser.rosters);
-  console.log("user: ", gUser);
 }
 
 export async function generateRosterID(roster) {
@@ -145,10 +140,8 @@ export async function loadUserRosters(user) {
   try {
     let rosters = [];
     const data = await readData("users/" + user.name);
-    console.log("hi", user, data);
     setUser(new User(user.name, data));
     for (const rosterID of data.split(",")) {
-      console.log("rosterID: ", rosterID);
       let roster = await loadRoster(rosterID);
       rosters.push(roster);
       addRoster(rosterID);

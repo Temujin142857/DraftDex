@@ -107,7 +107,7 @@ export const loadASpecie = async (specieName) => {
   if (validateSpecie(specie)) {
     globalSpeciesList[specie.name] = specie;
   }
-  return specie;
+  return globalSpeciesList[specie.name];
 };
 
 const validateSpecie = (specie) => {

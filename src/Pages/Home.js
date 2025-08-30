@@ -7,12 +7,11 @@ import { globalRosters, rosterToJSON } from "../Composables/useRosters";
 import { NavigateForwards } from "../Navigator";
 import Header from "../Components/Header";
 import { getL, swapLNG } from "../Composables/useLexicon";
-import { fromJSON } from "../Composables/useRosters";
+import { rosterFromJSON } from "../Composables/useRosters";
 
 const Home = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const passedData = location.state;
 
   const [slots, setSlots] = useState(12);
   const [rostersSelected, setRostersSelected] = useState([]);
@@ -27,7 +26,6 @@ const Home = (props) => {
     newRoster: "+ New Roster",
     socialTab: "Social Tab",
   });
-  const [newRoster, setNewRoster] = useState(fromJSON(passedData));
   const [data, setData] = useState([]);
 
   useEffect(() => {

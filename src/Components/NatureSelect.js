@@ -35,7 +35,6 @@ const NatureSelect = ({ user, defaultNature, onChange }) => {
   const [selectedNature, setSelectedNature] = useState(defaultNature);
 
   const handleChange = (selectedOption) => {
-    console.log(defaultNature);
     setSelectedNature(selectedOption);
     onChange(user, selectedOption);
   };

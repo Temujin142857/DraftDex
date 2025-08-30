@@ -1,6 +1,6 @@
 import { Team } from "../DataStructures/Team";
 import { Pokemon } from "../DataStructures/Pokemon";
-import { pokemonToJSON } from "./usePokemon";
+import { pokemonToJSON, pokemonFromJSON } from "./usePokemon";
 
 export const createTeamFromSnapshot = (snapshot) => {
   return new Team(snapshot.name, snapshot.pokemons);
@@ -43,6 +43,7 @@ export const removePokemon = (team, pokemon1) => {
 };
 
 export const teamToJSON = (team) => {
+  console.log("tem",team)
   return {
     name: team.name,
     pokemons: team.pokemons.map((pokemon) =>
@@ -51,9 +52,10 @@ export const teamToJSON = (team) => {
   };
 };
 
-export const fromJSON = (json) => {
+export const teamFromJSON = (json) => {
+  console.log(json)
   const pokemons = json.pokemons.map((pokemonJson) =>
-    Pokemon.fromJSON(pokemonJson),
+    pokemonFromJSON(pokemonJson),
   );
   return new Team(json.name, pokemons);
 };

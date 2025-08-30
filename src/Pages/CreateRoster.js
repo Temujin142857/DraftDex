@@ -5,7 +5,7 @@ import "../CSS/CreateRoster.css";
 import { Specie } from "../DataStructures/Specie";
 import Header from "../Components/Header";
 import { loadAllSpecies } from "../Composables/useDatabase.js";
-import { saveARoster } from "../Composables/useRosters";
+import { saveARoster, saveGlobalTemporaryRoster } from "../Composables/useRosters";
 import { Roster } from "../DataStructures/Roster";
 import {
   createRoster,
@@ -13,6 +13,7 @@ import {
   globalTemporaryRoster,
   rosterToJSON
 } from "../Composables/useRosters";
+import { NavigateForwards } from "../Navigator.js";
 
 class CreateRoster extends React.Component {
   constructor(props) {
@@ -27,41 +28,31 @@ class CreateRoster extends React.Component {
       filteredSpecies: ["temp"],
       searchInput: "",
       roster: new Roster("name"),
+      shouldNavigate: false,
     };
   }
 
   async componentDidMount() {
     loadTeams();
     const speciesL = await loadAllSpecies();
-    console.log("hi3 ", speciesL);
     this.setState({ filteredSpecies: speciesL });
     this.setState({ species: speciesL });
   }
 
-  selectSlot = async (speciePromise) => {
-    console.log(
-      "adding to speciesSelected:",
-      speciePromise,
-      "isPromise:",
-      speciePromise instanceof Promise,
-    );
-    const specie = await speciePromise;
-    console.log("hi4", specie);
+  selectSlot = async (specie) => {
     const roster = this.state.roster;
-    console.log("hi before added", roster);
     const newRoster = await createRoster(
       roster.name,
-      [...this.state.speciesSelected, specie],
+      [...roster.species, specie],
       roster.teams,
       roster.rosterID,
       true,
     );
     this.setState((prevState) => ({
-      speciesSelected: [...prevState.speciesSelected, specie],
+      speciesSelected: newRoster.species,
       roster: newRoster,
     }));
     setGlobalTemporaryRoster(newRoster);
-    console.log("hi after added: ", newRoster);
   };
 
   handleSearchInputChange = (event) => {
@@ -73,8 +64,7 @@ class CreateRoster extends React.Component {
   };
 
   saveRoster = async () => {
-    await generateRosterID(globalTemporaryRoster);
-    saveARoster(globalTemporaryRoster);
+    await saveGlobalTemporaryRoster();
   };
 
   handleInput = async (e) => {
@@ -94,6 +84,11 @@ class CreateRoster extends React.Component {
     setGlobalTemporaryRoster(newRoster);
   };
 
+  handleClick = async () => {
+    await this.saveRoster();
+    this.setState({ shouldNavigate: true});
+  };
+
   render() {
     const {
       emptySlots,
@@ -102,8 +97,17 @@ class CreateRoster extends React.Component {
       slotSelected,
       searchInput,
       filteredSpecies,
-      roster,
+      roster,shouldNavigate,
     } = this.state;
+
+    if (shouldNavigate) {
+      return (
+        <NavigateForwards
+          path="/"
+        />
+      );
+    }
+
     return (
       <div
         style={{
@@ -195,22 +199,20 @@ class CreateRoster extends React.Component {
             </ul>
           </div>
         </div>
-        <div onClick={this.saveRoster}>
-          <Link
-            to="/"
-            state={rosterToJSON(roster)}
-            className={"link"}
-            style={{
-              display: "block",
-              marginTop: "20px",
-              color: "white",
-              textDecoration: "none",
-              fontSize: "24px",
-            }}
-          >
-            Save
-          </Link>
-        </div>
+        <div
+        onClick={this.handleClick}
+        className="link"
+        style={{
+          display: "block",
+          marginTop: "20px",
+          color: "white",
+          textDecoration: "none",
+          fontSize: "24px",
+          cursor: "pointer"
+        }}
+      >
+        Save
+      </div>
       </div>
     );
   }

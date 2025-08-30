@@ -1,3 +1,7 @@
+import { Pokemon } from "../DataStructures/Pokemon";
+import { Specie } from "../DataStructures/Specie";
+import { globalSpeciesList } from "./useSpecies";
+
 export const createPokemon = (
   specie = null,
   nature = "Serious",
@@ -40,12 +44,12 @@ export const createPokemonFromSnapshot = (snapshot) => {
   return null;
 };
 
-export const setIv = (iv, index) => {
+export const setIv = (pokemon, iv, index) => {
   pokemon.ivs[index] = iv;
   recalculateStat(pokemon, index);
 };
 
-export const setEv = (ev, index) => {
+export const setEv = (pokemon, ev, index) => {
   pokemon.evs[index] = ev;
   recalculateStat(pokemon, index);
 };
@@ -170,7 +174,7 @@ export const pokemonToJSON = (pokemon) => {
   };
 };
 
-export const fromJSON = (json) => {
+export const pokemonFromJSON = (json) => {
   if (json.specie) {
     return new Pokemon(
       json.specie,

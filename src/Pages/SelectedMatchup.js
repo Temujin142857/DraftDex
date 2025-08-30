@@ -23,7 +23,7 @@ import {
   rosterToJSON
 } from "../Composables/useRosters";
 import { Ability } from "../DataStructures/Ability";
-import { setIv, setEv, setNature } from "../Composables/usePokemon.js";
+import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON } from "../Composables/usePokemon.js";
 
 const SelectedMatchup = () => {
   const location = useLocation();
@@ -41,11 +41,11 @@ const SelectedMatchup = () => {
   const handleNatureChange = (user, selectedOption) => {
     // Assuming selectedUserPokemon and selectedEnemyPokemon are objects with a method to update nature
     if (user && selectedUserPokemon) {
-      const updatedUserPokemon = fromJSON(toJSONPokemon(selectedUserPokemon));
+      const updatedUserPokemon = pokemonFromJSON(pokemonToJSON(selectedUserPokemon));
       setNature(updatedUserPokemon, selectedOption.value);
       setSelectedUserPokemon(updatedUserPokemon);
     } else if (!user && selectedEnemyPokemon) {
-      const updatedEnemyPokemon = fromJSON(pokemonToJSON(selectedEnemyPokemon));
+      const updatedEnemyPokemon = pokemonFromJSON(pokemonToJSON(selectedEnemyPokemon));
       setNature(updatedEnemyPokemon, selectedOption.value);
       setSelectedEnemyPokemon(updatedEnemyPokemon);
     }
@@ -61,12 +61,12 @@ const SelectedMatchup = () => {
       try {
         if (globalUserRoster.isShallow) {
           setGlobalUserRoster(
-            await loadARoster(initialUserRoster.rosterID, false),
+            await loadARoster(globalUserRoster.rosterID, false),
           );
         }
         if (globalEnemyRoster.isShallow) {
           setGlobalEnemyRoster(
-            await loadARoster(initialEnemyRoster.rosterID, false),
+            await loadARoster(globalEnemyRoster.rosterID, false),
           );
         }
 
@@ -74,8 +74,8 @@ const SelectedMatchup = () => {
         setEnemyRoster(globalEnemyRoster);
 
         if (
-          globalUserRoster.teams.length > 0 &&
-          globalUserRoster.teams[0].pokemons.length > 0
+          globalUserRoster.teams?.length > 0 &&
+          globalUserRoster.teams[0]?.pokemons?.length > 0
         ) {
           setSelectedUserPokemon(globalUserRoster.teams[0].pokemons[0]);
         }
@@ -203,7 +203,6 @@ const SelectedMatchup = () => {
   };
 
   function getColorForType(type) {
-    console.log(type);
     switch (type.toLowerCase()) {
       case "normal":
         return "gray";

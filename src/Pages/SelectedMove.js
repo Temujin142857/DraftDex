@@ -10,7 +10,8 @@ import "../CSS/SelectedMove.css";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Components/Header";
-import { saveARoster, rosterToJSON } from "../Composables/useRosters";
+import { saveARoster, rosterToJSON, rosterFromJSON } from "../Composables/useRosters";
+import { pokemonFromJSON } from "../Composables/usePokemon";
 
 
 const SelectedMove = (props) => {
@@ -37,11 +38,11 @@ const SelectedMove = (props) => {
 
     const initialSelectedMove = state && state.data ? state.data.move : null;
     const initialSelectedPokemon =
-      state && state.data ? Pokemon.fromJSON(state.data.pokemon) : [];
+      state && state.data ? pokemonFromJSON(state.data.pokemon) : [];
     const initialUserRoster =
-      state && state.data ? Roster.fromJSON(state.data.userRoster) : [];
+      state && state.data ? rosterFromJSON(state.data.userRoster) : [];
     const initialEnemyRoster =
-      state && state.data ? Roster.fromJSON(state.data.enemyRoster) : [];
+      state && state.data ? rosterFromJSON(state.data.enemyRoster) : [];
     const initialMovesSelected = initialSelectedPokemon
       ? initialSelectedPokemon.moves
       : null;
