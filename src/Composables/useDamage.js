@@ -1,7 +1,10 @@
+import { Item } from "../DataStructures/Item";
+
 export function calculateDamage(
   attackingPokemon,
   move,
   defendingPokemon,
+  item,
   burn = 1,
   screens = 1,
   targets = 1,
@@ -19,6 +22,10 @@ export function calculateDamage(
   let randmin = 0.85;
   let typeWeakness = 1;
   console.log("move",move)
+  if(item instanceof Item){
+    //add a check for conditions
+    other=other*item.multiplyer;
+  }
   for (const type in defendingPokemon.specie?.types) {
     typeWeakness *= typeChartCheck(
       move.type.toLowerCase(),

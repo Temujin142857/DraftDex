@@ -162,6 +162,7 @@ const SelectedMatchup = () => {
   };
 
   const dmgCalc = (move, min, user) => {
+    if(!move){console.log("no move, damageCalc"); return 1;}
     let dmg = user
       ? calculateDamage(selectedUserPokemon, move, selectedEnemyPokemon)
       : calculateDamage(selectedEnemyPokemon, move, selectedUserPokemon);

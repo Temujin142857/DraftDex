@@ -1,4 +1,4 @@
-import { createTeam, createTeamFromSnapshot, teamFromJSON, teamToJSON, flattenTeam } from "./useTeams.js";
+import { createTeam, createTeamFromSnapshot, teamFromJSON, teamToJSON, flattenTeam,createDefaultTeam } from "./useTeams.js";
 import {
   loadRoster,
   saveSpecie,
@@ -80,7 +80,7 @@ export const loadRostersFromUser = async (user, isShallow) => {
 };
 
 export const createRosterFromSnapshot = async (snapshot, isShallow) => {
-  console.log("roster snapshot", snapshot)
+  console.log("roster snapshot", snapshot, isShallow)
   let name = snapshot.name;
   let id = snapshot.rosterID;
   let speciesList = snapshot.speciesList || snapshot.species;
@@ -91,13 +91,16 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
         loadASpecie(specie.name ? specie.name : specie),
       ),
     );
-    if(teams){
-      console.log("hi0")
-    for (let i = 0; i < teams.length; i++) {
-      teams[i] = createTeamFromSnapshot(teams[i], species);
-      const team = teams[i];
+    if(teams&&teams.length){
+      console.log("hi0", name, species)
+      for (let i = 0; i < teams.length; i++) {
+        teams[i] = createTeamFromSnapshot(teams[i], species);
+        const team = teams[i];
+      }    
+    } else{
+      console.log("hi01", name)
+      teams=[createDefaultTeam(species)];
     }
-  } 
   }
 
   return createRoster(name, speciesList, teams, id, isShallow);

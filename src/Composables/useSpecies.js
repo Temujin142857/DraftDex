@@ -106,12 +106,15 @@ export const loadASpecie = async (specieName) => {
   }
   if (validateSpecie(specie)) {
     globalSpeciesList[specie.name] = specie;
+  } else{
+    console.log("invalid specie", specie)
   }
   return globalSpeciesList[specie.name];
 };
 
 const validateSpecie = (specie) => {
   return (
+    (specie instanceof Specie)&&
     specie &&
     specie.name &&
     specie.baseStats &&

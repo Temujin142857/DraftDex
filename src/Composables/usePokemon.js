@@ -44,9 +44,9 @@ export const createPokemon = (
     item,
     level,
   );
-console.log("hi1,",pokemon)
+console.log("hi1,",pokemon, pokemon.specie instanceof Specie)
   if (pokemon.specie instanceof Specie && pokemon.specie.baseStats) {
-    console.log("hi2")
+    console.log("hi2", pokemon)
     for (let i = 0; i < 6; i++) {
       recalculateStat(pokemon, i);
     }
@@ -57,7 +57,7 @@ console.log("hi1,",pokemon)
     }
     if(moves.length){
       for (let i = 0; i < moves.length; i++) {
-        console.log("hi3")
+        console.log("hi3", pokemon, moves)
         pokemon.moves[i] = (typeof moves[i]=="string") ? loadMoveFromName(moves[i]): moves[i];        
       }
     }
