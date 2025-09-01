@@ -13,6 +13,7 @@ export function calculateDamage(
   other = 1,
   terrain = 1,
 ) {
+  if(move.category==="status"){return { min: 0, max: 0 };}
   let stab = attackingPokemon.specie?.types.some((type) => {
     return type === move?.type;
   })
@@ -22,10 +23,6 @@ export function calculateDamage(
   let randmin = 0.85;
   let typeWeakness = 1;
   console.log("move",move)
-  if(item instanceof Item){
-    //add a check for conditions
-    other=other*item.multiplyer;
-  }
   for (const type in defendingPokemon.specie?.types) {
     typeWeakness *= typeChartCheck(
       move.type.toLowerCase(),
@@ -40,6 +37,12 @@ export function calculateDamage(
     move.category === "Physical"
       ? defendingPokemon.stats[2]
       : defendingPokemon.stats[4];
+
+  if(item instanceof Item){
+    console.log("item multiplyer", getItemMulitplyer(item, move, typeWeakness))
+    other=other*getItemMulitplyer(item, move, typeWeakness);
+  }
+
   let nonRandDmg =
     Math.round(
       (((2 * attackingPokemon.level) / 5 + 2) *
@@ -57,6 +60,28 @@ export function calculateDamage(
     other *
     typeWeakness;
   return { min: randmin * nonRandDmg, max: randmax * nonRandDmg };
+}
+
+
+function getItemMulitplyer(item, move, typeWeakness){
+  const itemName=item.name.toLowerCase();
+  //plates and gems
+  if(itemName.includes("plate")||itemName.includes("gem")){
+    if(item.conditions.includes(move.type.toLowerCase())){
+      return item.multiplyer;
+    }
+  }else if (itemName.includes("choice")|| itemName==="muscle band"||itemName==="wise glasses"){
+    if(item.conditions.includes(move.category)){
+      return item.multiplyer;
+    }
+  }else if(itemName==="black belt"){
+    if(typeWeakness>1){
+      return item.multiplyer;
+    }
+  } else if(itemName==="life orb"){
+
+  }
+  return 1;
 }
 
 function typeChartCheck(move, defender) {

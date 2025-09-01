@@ -3,19 +3,20 @@ import Select from "react-select";
 import { FaSearch } from "react-icons/fa";
 import { ITEMS } from "../DataStructures/Item";
 
-const PokemonItemsSelect = ({ onChange }) => {
-  const [selectedItems, setSelectedItems] = useState([]);
 
-  const handleChange = (selectedOptions) => {
-    setSelectedItems(selectedOptions);
-    onChange(selectedOptions);
-  };
+const PokemonItemsSelect = ({ onChange }) => {
+  const [selectedItem, setSelectedItem] = useState(null);
+
+const handleChange = (selectedOption) => {
+  setSelectedItem(selectedOption);
+  onChange(selectedOption); // ← this sends the selected item to the parent
+};
 
   return (
     <div style={{ width: "100%" }}>
       <Select
         options={ITEMS}
-        value={selectedItems}
+        value={selectedItem}
         onChange={handleChange}
         placeholder="Select Pokémon Items..."
         styles={{

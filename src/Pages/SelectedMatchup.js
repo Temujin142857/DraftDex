@@ -40,6 +40,9 @@ const SelectedMatchup = () => {
   const [selectedUserPokemon, setSelectedUserPokemon] = useState(defaultPokemon);
   const [selectedEnemyPokemon, setSelectedEnemyPokemon] = useState(defaultPokemon);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedUserItem, setSelectedUserItem] = useState(null);
+  const [selectedEnemyItem, setSelectedEnemyItem] = useState(null);
+
 
   const handleNatureChange = (user, selectedOption) => {
     // Assuming selectedUserPokemon and selectedEnemyPokemon are objects with a method to update nature
@@ -47,16 +50,26 @@ const SelectedMatchup = () => {
       const updatedUserPokemon = pokemonFromJSON(pokemonToJSON(selectedUserPokemon));
       setNature(updatedUserPokemon, selectedOption.value);
       setSelectedUserPokemon(updatedUserPokemon);
+      if(updatedUserPokemon.item){
+        setSelectedUserItem(updatedUserPokemon.item)
+      }
     } else if (!user && selectedEnemyPokemon) {
       const updatedEnemyPokemon = pokemonFromJSON(pokemonToJSON(selectedEnemyPokemon));
       setNature(updatedEnemyPokemon, selectedOption.value);
       setSelectedEnemyPokemon(updatedEnemyPokemon);
+      if(updatedEnemyPokemon.item){
+        setSelectedEnemyItem(updatedEnemyPokemon.item)
+      }
     }
-
-    // Similar logic for selectedEnemyPokemon if needed
   };
-  const handleItemChange = (selectedOptions) => {
-    //setSelectedNatures(selectedOptions);
+
+
+  const handleItemChange = (selectedItem, user) => {
+    if(user){
+      setSelectedUserItem(selectedItem);
+    } else {
+      setSelectedEnemyItem(selectedItem);
+    }
   };
 
   useEffect(() => {
@@ -164,8 +177,8 @@ const SelectedMatchup = () => {
   const dmgCalc = (move, min, user) => {
     if(!move){console.log("no move, damageCalc"); return 1;}
     let dmg = user
-      ? calculateDamage(selectedUserPokemon, move, selectedEnemyPokemon)
-      : calculateDamage(selectedEnemyPokemon, move, selectedUserPokemon);
+      ? calculateDamage(selectedUserPokemon, move, selectedEnemyPokemon, selectedUserItem)
+      : calculateDamage(selectedEnemyPokemon, move, selectedUserPokemon, selectedEnemyItem);
     let percentDmg = user
       ? {
           max:
@@ -374,7 +387,7 @@ const SelectedMatchup = () => {
                   </div>
                   <div style={{ marginLeft: "10px" }}>
                     <h4>Select Item</h4>
-                    <ItemSelect onChange={handleItemChange} />
+                    <ItemSelect onChange={(selected) => handleItemChange(selected, true)} />
                   </div>
                 </div>
 
@@ -528,7 +541,7 @@ const SelectedMatchup = () => {
                   </div>
                   <div style={{ marginLeft: "10px" }}>
                     <h4>Select Item</h4>
-                    <ItemSelect onChange={handleItemChange} />
+                    <ItemSelect onChange={(selected) => handleItemChange(selected, false)} />
                   </div>
                 </div>
                 <div style={{ display: "flex" }}>

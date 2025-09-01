@@ -1,14 +1,15 @@
 export class Item{
     constructor(name, multiplyer, conditions){
-        this.name=name;
-        this.label=this.name;
+        this.label=name;
+        this.name=name.toLowerCase();        
         this.multiplyer=multiplyer;
-        this.conditions=conditions;
+        this.conditions=conditions.toLowerCase();
     }
 }
 
 export const ITEMS = [
     // Type-boosting Plates
+    new Item("Blank Plate", 1.2, "Normal-type moves"),
     new Item("Earth Plate", 1.2, "Ground-type moves"),
     new Item("Flame Plate", 1.2, "Fire-type moves"),
     new Item("Splash Plate", 1.2, "Water-type moves"),
@@ -28,6 +29,7 @@ export const ITEMS = [
     new Item("Pixie Plate", 1.2, "Fairy-type moves"),
 
     // Gems (used only once but very powerful)
+    new Item("Normal Gem", 1.3, "First Normal-type move used"),
     new Item("Fire Gem", 1.3, "First Fire-type move used"),
     new Item("Water Gem", 1.3, "First Water-type move used"),
     new Item("Grass Gem", 1.3, "First Grass-type move used"),
@@ -47,7 +49,7 @@ export const ITEMS = [
     new Item("Fairy Gem", 1.3, "First Fairy-type move used"),
 
     // Choice Items
-    new Item("Choice Band", 1.5, "Boosts Attack, but locks move"),
+    new Item("Choice Band", 1.5, "Boosts physical Attack, but locks move"),
     new Item("Choice Specs", 1.5, "Boosts Special Attack, but locks move"),
     new Item("Choice Scarf", 1.5, "Boosts Speed, but locks move"),
 
