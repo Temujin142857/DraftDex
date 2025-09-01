@@ -1,12 +1,44 @@
 import { Team } from "../DataStructures/Team";
 import { Pokemon } from "../DataStructures/Pokemon";
-import { pokemonToJSON, pokemonFromJSON } from "./usePokemon";
+import { pokemonToJSON, pokemonFromJSON, flattenPokemon, createPokemon } from "./usePokemon";
+import { loadMoveFromName } from "./useMoves";
 
-export const createTeamFromSnapshot = (snapshot) => {
-  return new Team(snapshot.name, snapshot.pokemons);
+export const createTeamFromSnapshot = async (snapshot, species) => {  
+  console.log("team snapshot", snapshot)
+  for (let i = 0; i < snapshot.pokemons.length; i++) {
+    if (typeof snapshot.pokemons[i] == "string") {
+      const specie = species.find((s) => s.name === snapshot.pokemons[i]);
+      snapshot.pokemons[i] = createPokemon(specie);
+    } else {
+      snapshot.pokemons[i].specie = species.find(
+      (s) => s.name === snapshot.pokemons[i].specie);    
+    }
+    for (let j = 0; j < snapshot.pokemons[i].moves.length; j++) {            
+      snapshot.pokemons[i].moves[j] = (typeof snapshot.pokemons[i].moves[j]== "string") ? await loadMoveFromName(snapshot.pokemons[i].moves[j]) : snapshot.pokemons[i].moves[j];            
+    }
+  }
+  if(snapshot.pokemons[0].stats){
+    console.log("hino")
+    return new Team(snapshot.name, snapshot.pokemons);
+  }else{
+    console.log("hiyes")
+    console.log("hiyes",snapshot.pokemons)
+    let pokemons=snapshot.pokemons.map((pokemon)=>{createPokemon(pokemon.specie,pokemon.moves,pokemon.ability,pokemon.nature, pokemon.evs, pokemon.ivs, pokemon.item, pokemon.level)})
+    console.log("hiyes2",pokemons)
+    return new Team(snapshot.name, pokemons);
+  }
+  
 };
 
 export const createTeamsFromSnapshot = (snapshot) => {};
+
+export const flattenTeam = (team)=>{
+  let newTeam={name: team.name, pokemons: []};
+  for (let i = 0; i < team.pokemons.length; i++) {
+     newTeam.pokemons.push(flattenPokemon(team.pokemons[i]));    
+  }
+  return newTeam;
+}
 
 export const addPokemon = (team, pokemonToAdd) => {
   if (

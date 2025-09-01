@@ -170,14 +170,8 @@ const SelectedMove = (props) => {
   };
 
   const handleSave = () => {
-    console.log("saving the roster: " + userRoster);
-    const data = {
-      userRoster: rosterToJSON(userRoster),
-      enemyRoster: rosterToJSON(enemyRoster),
-    };
-    saveARoster(userRoster);
-    saveARoster(enemyRoster);
-    setData(data);
+    console.log("saving the roster: ", userRoster);
+    saveARoster(JSON.parse(JSON.stringify(userRoster)));
     setPath("/selectedMatchup");
     setNavigate(true);
   };

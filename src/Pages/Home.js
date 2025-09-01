@@ -47,7 +47,6 @@ const Home = (props) => {
       setGlobalEnemyRoster(newRostersSelected[1]);
       setShouldNavigate(true);
       setPath("/selectedMatchup");
-      // Assuming there's some navigation logic here
     }
     setRostersSelected(newRostersSelected);
   };

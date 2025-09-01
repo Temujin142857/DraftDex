@@ -1,5 +1,6 @@
 import { Pokemon } from "../DataStructures/Pokemon";
 import { Specie } from "../DataStructures/Specie";
+import { loadMoveFromName } from "./useMoves";
 import { globalSpeciesList } from "./useSpecies";
 
 
@@ -43,14 +44,21 @@ export const createPokemon = (
     item,
     level,
   );
-
+console.log("hi1,",pokemon)
   if (pokemon.specie instanceof Specie && pokemon.specie.baseStats) {
+    console.log("hi2")
     for (let i = 0; i < 6; i++) {
       recalculateStat(pokemon, i);
     }
     if (moves.length === 0 && specie.moves) {
       for (let i = 0; i < 4 && i < specie.moves.length; i++) {
         pokemon.moves.push(specie.moves[i]);
+      }
+    }
+    if(moves.length){
+      for (let i = 0; i < moves.length; i++) {
+        console.log("hi3")
+        pokemon.moves[i] = (typeof moves[i]=="string") ? loadMoveFromName(moves[i]): moves[i];        
       }
     }
     if (!ability && specie.abilities.length > 0) {
@@ -61,9 +69,8 @@ export const createPokemon = (
 };
 
 
-export const createPokemonFromSnapshot = (snapshot) => {
-  // Implement logic to create a Pokemon from a snapshot
-  return null;
+export const flattenPokemon = (pokemon) => {
+  return new Pokemon(pokemon.specie.name, pokemon.nature, pokemon.moves.map((elem)=>{return elem.name}), pokemon.evs, pokemon.ivs, pokemon.ability, pokemon. item, pokemon.level);
 };
 
 export const setIv = (pokemon, iv, index) => {

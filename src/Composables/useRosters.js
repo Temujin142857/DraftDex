@@ -1,4 +1,4 @@
-import { createTeam, createTeamFromSnapshot, teamFromJSON, teamToJSON } from "./useTeams.js";
+import { createTeam, createTeamFromSnapshot, teamFromJSON, teamToJSON, flattenTeam } from "./useTeams.js";
 import {
   loadRoster,
   saveSpecie,
@@ -12,6 +12,7 @@ import { Pokemon } from "../DataStructures/Pokemon";
 import { Team } from "../DataStructures/Team.js";
 import { Specie } from "../DataStructures/Specie.js";
 import { createPokemon } from "./usePokemon.js";
+import { loadMoveFromName } from "./useMoves.js";
 
 
 export let globalRosters = [];
@@ -59,11 +60,13 @@ export const createRoster = async (
       }
     }
   }
+  console.log("createdRoster", new Roster(name, newSpecies, teams, rosterID, isShallow))
   return new Roster(name, newSpecies, teams, rosterID, isShallow);
 };
 
 export const loadARoster = async (rosterID, isShallow) => {
-  return createRosterFromSnapshot(await loadRoster(rosterID), isShallow);
+  const roster=await loadRoster(rosterID);
+  return createRosterFromSnapshot(roster, isShallow);
 };
 
 export const loadRostersFromUser = async (user, isShallow) => {
@@ -77,6 +80,7 @@ export const loadRostersFromUser = async (user, isShallow) => {
 };
 
 export const createRosterFromSnapshot = async (snapshot, isShallow) => {
+  console.log("roster snapshot", snapshot)
   let name = snapshot.name;
   let id = snapshot.rosterID;
   let speciesList = snapshot.speciesList || snapshot.species;
@@ -88,19 +92,10 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
       ),
     );
     if(teams){
+      console.log("hi0")
     for (let i = 0; i < teams.length; i++) {
-      teams[i] = createTeamFromSnapshot(teams[i]);
+      teams[i] = createTeamFromSnapshot(teams[i], species);
       const team = teams[i];
-      for (let i = 0; i < team.pokemons.length; i++) {
-        if (typeof team.pokemons[i] == "string") {
-          const specie = species.find((s) => s.name === team.pokemons[i]);
-          team.pokemons[i] = createPokemon(specie);
-        } else {
-          team.pokemons[i].specie = species.find(
-            (s) => s.name === team.pokemons[i].specie,
-          );
-        }
-      }
     }
   } 
   }
@@ -113,6 +108,11 @@ export const saveARoster = async (roster) => {
   console.log("saving roster, useRosters:", roster);
   for (let i = 0; i < roster.species.length; i++) {
     if(roster.species[i] instanceof Specie) roster.species[i] = roster.species[i].name;
+  }
+  for (let i = 0; i < roster.teams.length; i++) {
+    if(roster.teams[i] instanceof Team) {
+      roster.teams[i]=flattenTeam(roster.teams[i]);
+    }
   }
   await saveRoster(roster);
 };

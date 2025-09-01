@@ -53,10 +53,6 @@ function readData(path) {
   });
 }
 
-export async function loadAPokemon(pokemonId, user = "default") {
-  const data = await readData(user + "/Pokemon/" + pokemonId);
-  return createPokemonFromSnapshot(data);
-}
 
 export async function loadSpecie(speciesName) {
   const data = await readData("species/" + speciesName);
@@ -84,7 +80,6 @@ export async function loadTeams() {
   return createTeamsFromSnapshot(data);
 }
 
-export function saveAPokemon(pokemon) {}
 
 export async function saveSpecie(specie) {
   console.log("saving specie: ", specie);
