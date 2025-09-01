@@ -4,6 +4,7 @@ Saving rosters, already saves whole roster when move is changed
 Abilities affecting damage, currently they don't
 plus sign next to stats for stages
 when you click on a move, instead of changing pages just open the dropdown in the place of that move
+fixing damage calc, right now it's slightly off
 
 # Getting Started with Create React App
 

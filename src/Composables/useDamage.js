@@ -12,13 +12,18 @@ export function calculateDamage(
   critical = 1,
   other = 1,
   terrain = 1,
+  statBoosts=[]
 ) {
   if(move.category==="status"){return { min: 0, max: 0 };}
-  let stab = attackingPokemon.specie?.types.some((type) => {
+
+  let isStab = attackingPokemon.specie?.types.some((type) => {
     return type === move?.type;
-  })
-    ? 1.5
-    : 1;
+  }); 
+  let stab=1;
+  if(isStab){
+    stab=attackingPokemon.ability.name.toLowerCase()==="adaptability"? 2:1.5
+  }
+
   let randmax = 1;
   let randmin = 0.85;
   let typeWeakness = 1;
@@ -79,10 +84,17 @@ function getItemMulitplyer(item, move, typeWeakness){
       return item.multiplyer;
     }
   } else if(itemName==="life orb"){
-
+    return item.multiplyer;
+  } else if(itemName.includes("mask")){
+    return item.multiplyer;
   }
   return 1;
 }
+
+function getAbilityMultiplyer(ability, move){
+
+}
+
 
 function typeChartCheck(move, defender) {
   switch (move) {

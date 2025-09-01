@@ -73,4 +73,10 @@ export const ITEMS = [
     new Item("Throat Spray", 1.0, "Boosts Sp. Atk when using sound move"),
     new Item("Booster Energy", 1.3, "Activates Protosynthesis/Quark Drive if no terrain"),
 
+    // Ogerpon Masks
+    new Item("Hearthflame Mask", 1.2, "Boosts all move damage"),
+    new Item("Wellspring Mask", 1.2, "Boosts all move damage"),
+    new Item("Cornerstone Mask", 1.2, "Boosts all move damage"),
+
+
 ];
