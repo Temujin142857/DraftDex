@@ -39,8 +39,6 @@ const SelectedMatchup = () => {
   const [selectedUserPokemon, setSelectedUserPokemon] = useState(defaultPokemon);
   const [selectedEnemyPokemon, setSelectedEnemyPokemon] = useState(defaultPokemon);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedUserItem, setSelectedUserItem] = useState(null);
-  const [selectedEnemyItem, setSelectedEnemyItem] = useState(null);
 
 
   useEffect(() => {
@@ -105,11 +103,11 @@ const SelectedMatchup = () => {
     const handleItemChange = (selectedItem, user) => {
       if(user){
         const prevPokemon=JSON.parse(JSON.stringify(selectedUserPokemon));
-        setSelectedUserItem(selectedItem);
+        selectedUserPokemon.item=selectedItem;
         replacePokemon(globalUserRoster.teams[0],prevPokemon, selectedUserPokemon);
       } else {
         const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
-        setSelectedEnemyItem(selectedItem);
+        selectedEnemyPokemon.item=selectedItem;
         replacePokemon(globalEnemyRoster.teams[0],prevPokemon, selectedEnemyPokemon);
       }
     };
@@ -187,8 +185,8 @@ const SelectedMatchup = () => {
   const dmgCalc = (move, min, user) => {
     if(!move){console.log("no move, damageCalc"); return 1;}
     let dmg = user
-      ? calculateDamage(selectedUserPokemon, move, selectedEnemyPokemon, selectedUserItem)
-      : calculateDamage(selectedEnemyPokemon, move, selectedUserPokemon, selectedEnemyItem);
+      ? calculateDamage(selectedUserPokemon, move, selectedEnemyPokemon)
+      : calculateDamage(selectedEnemyPokemon, move, selectedUserPokemon);
     let percentDmg = user
       ? {
           max:
@@ -679,7 +677,7 @@ const SelectedMatchup = () => {
                     </li>
                   ))}
               </ul>
-              <button onClick={handleSave()} style={{width: 75}}>save</button>
+              <button onClick={()=>handleSave()} style={{width: 75}}>save</button>
             </div>
             <div className={"container"}>
               <div className={"horizontal-line"}></div>
