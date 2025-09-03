@@ -107,15 +107,14 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
 };
 
 export const saveARoster = async (roster) => {
-  if(roster instanceof Promise){roster= await roster}
+  if(roster instanceof Promise){roster= await roster;}
   console.log("saving roster, useRosters:", roster);
   for (let i = 0; i < roster.species.length; i++) {
     if(roster.species[i] instanceof Specie) roster.species[i] = roster.species[i].name;
   }
-  for (let i = 0; i < roster.teams.length; i++) {
-    if(roster.teams[i] instanceof Team) {
-      roster.teams[i]=flattenTeam(roster.teams[i]);
-    }
+  for (let i = 0; i < roster.teams.length; i++) {     
+    roster.teams[i]=flattenTeam(roster.teams[i]);
+    console.log("flattened:", roster.teams[i]);
   }
   await saveRoster(roster);
 };
