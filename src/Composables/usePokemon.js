@@ -164,9 +164,9 @@ export const updateNatureNums = (pokemon) => {
     recalculateStat(pokemon, i);
   }  
   //note this is after the main calculation
-  dealWithProtoDrive(pokemon, terrain, weather);
+  //dealWithProtoDrive(pokemon, terrain, weather);
   //proto drive doesn include item mulipliers for some reason
-  dealWithItemMultiplyer(pokemon, terrain, weather)
+  //dealWithItemMultiplyer(pokemon, terrain, weather)
 };
 
 export const recalculateStat = (pokemon, index, terrain) => {
@@ -191,7 +191,7 @@ export const recalculateStat = (pokemon, index, terrain) => {
           100 +
           5) *
           pokemon.natureNums[index],
-      )*getAbilityMultiplyer(pokemon.ability, pokemon.item, index, terrain, weather));
+      )*1)//getAbilityMultiplyer(pokemon.ability, pokemon.item, index));
   }
   //put other ability modifiers here
 };

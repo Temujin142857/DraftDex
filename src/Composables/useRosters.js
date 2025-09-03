@@ -94,8 +94,8 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
     if(teams&&teams.length){
       console.log("hi0", name, species)
       for (let i = 0; i < teams.length; i++) {
-        teams[i] = createTeamFromSnapshot(teams[i], species);
-        const team = teams[i];
+        teams[i] = await createTeamFromSnapshot(teams[i], species);
+        console.log("hi03", teams[i])
       }    
     } else{
       console.log("hi01", name)
