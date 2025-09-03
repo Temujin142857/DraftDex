@@ -43,34 +43,6 @@ const SelectedMatchup = () => {
   const [selectedEnemyItem, setSelectedEnemyItem] = useState(null);
 
 
-  const handleNatureChange = (user, selectedOption) => {
-    // Assuming selectedUserPokemon and selectedEnemyPokemon are objects with a method to update nature
-    if (user && selectedUserPokemon) {
-      const updatedUserPokemon = pokemonFromJSON(pokemonToJSON(selectedUserPokemon));
-      setNature(updatedUserPokemon, selectedOption.value);
-      setSelectedUserPokemon(updatedUserPokemon);
-      if(updatedUserPokemon.item){
-        setSelectedUserItem(updatedUserPokemon.item)
-      }
-    } else if (!user && selectedEnemyPokemon) {
-      const updatedEnemyPokemon = pokemonFromJSON(pokemonToJSON(selectedEnemyPokemon));
-      setNature(updatedEnemyPokemon, selectedOption.value);
-      setSelectedEnemyPokemon(updatedEnemyPokemon);
-      if(updatedEnemyPokemon.item){
-        setSelectedEnemyItem(updatedEnemyPokemon.item)
-      }
-    }
-  };
-
-
-  const handleItemChange = (selectedItem, user) => {
-    if(user){
-      setSelectedUserItem(selectedItem);
-    } else {
-      setSelectedEnemyItem(selectedItem);
-    }
-  };
-
   useEffect(() => {
     const fetchRosters = async () => {
       console.log("shallow rosters: ", globalUserRoster)
@@ -113,12 +85,43 @@ const SelectedMatchup = () => {
     fetchRosters();
   }, []);
 
+
+  const handleNatureChange = (user, selectedOption) => {
+      // Assuming selectedUserPokemon and selectedEnemyPokemon are objects with a method to update nature
+      if (user && selectedUserPokemon) {
+        const prevPokemon=JSON.parse(JSON.stringify(selectedUserPokemon));
+        setNature(selectedUserPokemon, selectedOption.value);
+        setSelectedUserPokemon(selectedUserPokemon);
+        replacePokemon(globalUserRoster.teams[0],prevPokemon, selectedUserPokemon);
+      } else if (!user && selectedEnemyPokemon) {
+        const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
+        setNature(selectedEnemyPokemon, selectedOption.value);
+        setSelectedEnemyPokemon(selectedEnemyPokemon);
+        replacePokemon(globalEnemyRoster.teams[0],prevPokemon, selectedEnemyPokemon);
+      }
+    };
+
+
+    const handleItemChange = (selectedItem, user) => {
+      if(user){
+        const prevPokemon=JSON.parse(JSON.stringify(selectedUserPokemon));
+        setSelectedUserItem(selectedItem);
+        replacePokemon(globalUserRoster.teams[0],prevPokemon, selectedUserPokemon);
+      } else {
+        const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
+        setSelectedEnemyItem(selectedItem);
+        replacePokemon(globalEnemyRoster.teams[0],prevPokemon, selectedEnemyPokemon);
+      }
+    };
+
   const handleIVChange = (user, index, iv, event) => {
     if (user) {
       const newIVs = [...selectedUserPokemon.ivs];
       newIVs[index] = parseInt(event.target.value, 10);
+      const prevPokemon=JSON.parse(JSON.stringify(selectedUserPokemon));
       setIv(selectedUserPokemon, newIVs[index], index);
       setSelectedUserPokemon((prevState) => ({ ...prevState, ivs: newIVs }));
+      replacePokemon(globalUserRoster.teams[0],prevPokemon, selectedUserPokemon);
     } else {
       const newIVs = [...selectedEnemyPokemon.ivs];
       newIVs[index] = parseInt(event.target.value, 10);
@@ -144,8 +147,10 @@ const SelectedMatchup = () => {
     } else {
       const newEVs = [...selectedEnemyPokemon.evs];
       newEVs[index] = parseInt(event.target.value, 10);
+      const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
       setEv(selectedEnemyPokemon, newEVs[index], index);
       setSelectedEnemyPokemon((prevState) => ({ ...prevState, evs: newEVs }));
+      replacePokemon(globalEnemyRoster.teams[0],prevPokemon, selectedEnemyPokemon);
     }
 
   };
