@@ -66,17 +66,14 @@ export const addPokemon = (team, pokemonToAdd) => {
 
 export const replacePokemon = (team, pokemonToReplace, newPokemon) => {
   console.log("replacing pokemon", pokemonToReplace, newPokemon)
-  if (
-    team.pokemons.some(
-      (pokemon) => pokemon.specie.name === pokemonToReplace.specie.name,
-    )
-  ) {
-    let index = team.pokemons.indexOf(pokemonToReplace);
-    team.pokemons[index] = newPokemon;
-    return true;
-  } else {
-    return false;
+  for (let i = 0; i < team.pokemons.length; i++) {
+    if (team.pokemons[i].specie.name===pokemonToReplace.specie.name ) {
+      team.pokemons[i] = newPokemon;
+      console.log(newPokemon, i)
+      return true;
+    }   
   }
+  return false;
 };
 
 export const removePokemon = (team, pokemon1) => {

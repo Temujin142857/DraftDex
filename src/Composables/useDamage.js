@@ -27,7 +27,7 @@ export function calculateDamage(
   let randmax = 1;
   let randmin = 0.85;
   let typeWeakness = 1;
-  console.log("move",move)
+  //console.log("move",move)
   for (const type in defendingPokemon.specie?.types) {
     typeWeakness *= typeChartCheck(
       move.type.toLowerCase(),
