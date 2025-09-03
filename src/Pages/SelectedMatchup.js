@@ -679,7 +679,7 @@ const SelectedMatchup = () => {
                     </li>
                   ))}
               </ul>
-              <button style={{width: 75}}>save</button>
+              <button onClick={handleSave()} style={{width: 75}}>save</button>
             </div>
             <div className={"container"}>
               <div className={"horizontal-line"}></div>
