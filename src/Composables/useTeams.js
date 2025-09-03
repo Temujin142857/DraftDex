@@ -23,7 +23,7 @@ export const createTeamFromSnapshot = async (snapshot, species) => {
   }else{
     console.log("hiyes")
     console.log("hiyes",snapshot.pokemons)
-    let pokemons=snapshot.pokemons.map((pokemon)=>{createPokemon(pokemon.specie,pokemon.moves,pokemon.ability,pokemon.nature, pokemon.evs, pokemon.ivs, pokemon.item, pokemon.level)})
+    let pokemons=snapshot.pokemons.map((pokemon)=>{return createPokemon(pokemon.specie,pokemon.moves,pokemon.ability,pokemon.nature, pokemon.evs, pokemon.ivs, pokemon.item || null, pokemon.level)})
     console.log("hiyes2",pokemons)
     return new Team(snapshot.name, pokemons);
   }
