@@ -161,10 +161,14 @@ export const updateNatureNums = (pokemon) => {
   }
   for (let i = 0; i < 6; i++) {
     recalculateStat(pokemon, i);
-  }
+  }  
+  //note this is after the main calculation
+  dealWithProtoDrive(pokemon, terrain, weather);
+  //proto drive doesn include item mulipliers for some reason
+  dealWithItemMultiplyer(pokemon, terrain, weather)
 };
 
-export const recalculateStat = (pokemon, index) => {
+export const recalculateStat = (pokemon, index, terrain) => {
   switch (index) {
     case 0:
       pokemon.stats[index] = Math.floor(
@@ -178,7 +182,7 @@ export const recalculateStat = (pokemon, index) => {
       );
       break;
     default:
-      pokemon.stats[index] = Math.floor(
+      pokemon.stats[index] = Math.floor(Math.floor(
         (((2 * pokemon.specie.baseStats[index] +
           pokemon.ivs[index] +
           Math.floor(pokemon.evs[index] / 4)) *
@@ -186,9 +190,73 @@ export const recalculateStat = (pokemon, index) => {
           100 +
           5) *
           pokemon.natureNums[index],
-      );
+      )*getAbilityMultiplyer(pokemon.ability, pokemon.item, index, terrain, weather));
   }
+  //put other ability modifiers here
 };
+
+
+const dealWithProtoDrive = (pokemon, terrain, weather)=>{
+  if(pokemon.ability.name.toLowerCase()==="quark drive"){
+    if(pokemon.item.name.toLowerCase()==="booster energy"||terrain==="electric terrain"){
+      const index=findHighest(pokemon.stats);
+      if(index===5)return 1.5;
+      else if(index!==0) return 1.3;
+    }
+  } else if (pokemon.ability.name.toLowerCase()==="protosynthesis"){
+    if(pokemon.item.name.toLowerCase()==="booster energy"||weather==="sun"){
+      const index=findHighest(pokemon.stats);
+      if(index===5)return 1.5;
+      else if(index!==0) return 1.3;
+    }
+  }
+}
+
+const findHighest=(stats)=>{
+  let highest=-1;
+  let highestIndex=0;
+  for (let i = stats.length; i > -1 ; i--) {
+    if(stats[i]>highest){
+      highest=stats[i];
+      highestIndex=i;
+    }
+  }
+  return highestIndex;
+}
+
+const getAbilityMultiplyer=(ability, item, index, terrain, weather)=>{
+  switch(ability.name.toLowerCase()){
+    case "huge power": 
+      if(index===1)return 2;
+      break;
+    case "unburden":
+      if(item==null&&index===5)return 2;
+      break;
+  }
+  return 1;
+}
+
+const dealWithItemMultiplyer=(pokemon, item, index, terrain, weather)=>{
+  switch(item.name.toLowerCase()){
+    case "choice scarf":
+      if (index===5) return 1.5;
+      break;
+    // Terrain-related Seeds
+    case "grassy seed":
+      if (terrain === "grassy terrain" && index === 2) return 1.5; // Boosts Defense
+      break;
+    case "misty seed":
+      if (terrain === "misty terrain" && index === 4) return 1.5; // Boosts Sp. Def
+      break;
+    case "electric seed":
+      if (terrain === "electric" && index === 2) return 1.5; // Boosts Defense
+      break;
+    case "psychic seed":
+      if (terrain === "psychic terrain" && index === 4) return 1.5; // Boosts Sp. Def
+      break; 
+  }
+  return 1;
+}
 
 export const pokemonToJSON = (pokemon) => {
   return {

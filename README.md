@@ -5,6 +5,7 @@ Abilities affecting damage, currently they don't
 plus sign next to stats for stages
 when you click on a move, instead of changing pages just open the dropdown in the place of that move
 fixing damage calc, right now it's slightly off
+letting abiltities/items affect pkm stats
 
 # Getting Started with Create React App
 
