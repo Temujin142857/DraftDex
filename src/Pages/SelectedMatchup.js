@@ -234,7 +234,7 @@ const SelectedMatchup = () => {
     );
   };
 
-  function getColorForType(type) {
+  const getColorForType = (type) => {
     switch (type.toLowerCase()) {
       case "normal":
         return "gray";
@@ -247,21 +247,21 @@ const SelectedMatchup = () => {
       case "grass":
         return "green";
       case "ice":
-        return "lightblue";
+        return "cyan";
       case "fighting":
-        return "red";
+        return "darkRed";
       case "poison":
         return "purple";
       case "ground":
-        return "brown";
+        return "chocolate";
       case "flying":
         return "skyblue";
       case "psychic":
         return "pink";
       case "bug":
-        return "lime";
+        return "oliveDrab";
       case "rock":
-        return "sienna";
+        return "darkGoldenRod";
       case "ghost":
         return "violet";
       case "dragon":
@@ -269,13 +269,13 @@ const SelectedMatchup = () => {
       case "dark":
         return "darkslategray";
       case "steel":
-        return "lightsteelblue";
+        return "slateGray";
       case "fairy":
         return "orchid";
       default:
         return "black";
     }
-  }
+  };
 
   const handleSave = () => {
       console.log("saving the roster: ", globalUserRoster);
