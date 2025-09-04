@@ -1,0 +1,93 @@
+import React, { useState } from 'react';
+
+const StatChangeDropdown = () => {
+  const [selected, setSelected] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  const numbers = Array.from({ length: 13 }, (_, i) => i - 6);
+
+  const handleSelect = (value) => {
+    setSelected(value);
+    setOpen(false);
+  };
+
+  const above = numbers.filter((n) => n > selected).reverse();
+  const below = numbers.filter((n) => n < selected);
+
+  return (
+    <div style={{ width: '30px', margin: 'auto', position: 'relative', fontFamily: 'Arial' }}>
+      <div
+        onClick={() => setOpen(!open)}
+        style={{
+          border: '1px solid #ccc',
+          textAlign: 'center',
+          cursor: 'pointer',
+          backgroundColor: '#f9f9f9',
+        }}
+      >
+        {selected >= 0 ? `+${selected}` : selected}
+      </div>
+
+      {open && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            border: '1px solid #ccc',
+            backgroundColor: 'white',
+            zIndex: 1,
+            maxHeight: '300px',
+            overflowY: 'auto',
+          }}
+        >
+          {above.map((n) => (
+            <div
+              key={n}
+              onClick={() => handleSelect(n)}
+              style={{
+                padding: '8px',
+                textAlign: 'center',
+                borderBottom: '1px solid #eee',
+                cursor: 'pointer',
+              }}
+            >
+              {n >= 0 ? `+${n}` : n}
+            </div>
+          ))}
+
+          <div
+            style={{
+              padding: '8px',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              backgroundColor: '#efefef',
+              borderTop: '1px solid #ddd',
+              borderBottom: '1px solid #ddd',
+            }}
+          >
+            {selected >= 0 ? `+${selected}` : selected}
+          </div>
+
+          {below.map((n) => (
+            <div
+              key={n}
+              onClick={() => handleSelect(n)}
+              style={{
+                padding: '8px',
+                textAlign: 'center',
+                borderTop: '1px solid #eee',
+                cursor: 'pointer',
+              }}
+            >
+              {n >= 0 ? `+${n}` : n}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default StatChangeDropdown;

@@ -19,10 +19,11 @@ import {
   saveARoster
 } from "../Composables/useRosters";
 import { Ability } from "../DataStructures/Ability";
-import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON, defaultPokemon, createPokemon, jsonFromPartialObject, setGlobalPokemonToExamine } from "../Composables/usePokemon.js";
+import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON, defaultPokemon, createPokemon, jsonFromPartialObject, setGlobalPokemonToExamine, setStatChange } from "../Composables/usePokemon.js";
 import { replacePokemon } from "../Composables/useTeams.js";
 import { setGlobalMoveToExamine } from "../Composables/useMoves.js";
 import MoveSelect from "../Components/MoveSelect.js"
+import StatChangeDropdown from "../Components/StatChangeDropdown.js";
 
 const SelectedMatchup = () => {
   const location = useLocation();
@@ -123,6 +124,24 @@ const SelectedMatchup = () => {
       const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
       setIv(selectedEnemyPokemon, newIVs[index], index);
       setSelectedEnemyPokemon((prevState) => ({ ...prevState, ivs: newIVs }));
+      replacePokemon(globalEnemyRoster.teams[0],prevPokemon, selectedEnemyPokemon);
+    }
+  };
+
+    const handleStatChangeChange = (user, index, statChange, event) => {
+    if (user) {
+      const newStatChanges = [...selectedUserPokemon.statChanges];
+      newStatChanges[index] = parseInt(event.target.value, 10);
+      const prevPokemon=JSON.parse(JSON.stringify(selectedUserPokemon));
+      setStatChange(selectedUserPokemon, newStatChanges[index], index);
+      setSelectedUserPokemon((prevState) => ({ ...prevState, statChanges: newStatChanges }));
+      replacePokemon(globalUserRoster.teams[0],prevPokemon, selectedUserPokemon);
+    } else {
+      const newStatChanges = [...selectedEnemyPokemon.statChanges];
+      newStatChanges[index] = parseInt(event.target.value, 10);
+      const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
+      setIv(selectedEnemyPokemon, newStatChanges[index], index);
+      setSelectedEnemyPokemon((prevState) => ({ ...prevState, statChanges: newStatChanges }));
       replacePokemon(globalEnemyRoster.teams[0],prevPokemon, selectedEnemyPokemon);
     }
   };
@@ -437,7 +456,7 @@ const SelectedMatchup = () => {
                         selectedUserPokemon.ivs?.map((iv, index) => (
                           <li key={index} className="liii">
                             <input
-                              style={{ width: "40px", marginLeft: "10px" }}
+                              style={{ width: "30px", marginLeft: "10px" }}
                               type="number"
                               value={iv}
                               max="31"
@@ -458,7 +477,7 @@ const SelectedMatchup = () => {
                         selectedUserPokemon.evs?.map((ev, index) => (
                           <li key={index} className="liii">
                             <input
-                              style={{ width: "50px", marginLeft: "10px" }}
+                              style={{ width: "35px", marginLeft: "10px" }}
                               type="number"
                               value={ev}
                               step="4"
@@ -584,7 +603,7 @@ const SelectedMatchup = () => {
                         selectedEnemyPokemon.ivs?.map((iv, index) => (
                           <li key={index} className="liii">
                             <input
-                              style={{ width: "40px", marginLeft: "10px" }}
+                              style={{ width: "30px", marginLeft: "10px" }}
                               type="number"
                               value={iv}
                               size="2"
@@ -605,7 +624,7 @@ const SelectedMatchup = () => {
                         selectedEnemyPokemon.evs?.map((ev, index) => (
                           <li key={index} className="liii">
                             <input
-                              style={{ width: "50px", marginLeft: "10px" }}
+                              style={{ width: "35px", marginLeft: "10px" }}
                               type="number"
                               value={ev}
                               step="4"
@@ -628,6 +647,20 @@ const SelectedMatchup = () => {
                             style={{ marginLeft: "10px", marginBottom: "13px" }}
                           >
                             {stat}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h2>+/-</h2>
+                    <ul style={{ listStyleType: "none", padding: 0, marginTop: "5px" }}>
+                      {selectedEnemyPokemon &&
+                        selectedEnemyPokemon.statChanges?.map((statChange, index) => (
+                          <li
+                            key={index}
+                            style={{ marginLeft: "10px", marginBottom: "15px", marginTop: "2px" }}
+                          >
+                            <StatChangeDropdown/>
                           </li>
                         ))}
                     </ul>
