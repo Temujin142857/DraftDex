@@ -28,12 +28,15 @@ import { Ability } from "../DataStructures/Ability";
 import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON, defaultPokemon, createPokemon, jsonFromPartialObject, setGlobalPokemonToExamine } from "../Composables/usePokemon.js";
 import { replacePokemon } from "../Composables/useTeams.js";
 import { setGlobalMoveToExamine } from "../Composables/useMoves.js";
+import MoveSelect from "../Components/MoveSelect.js"
 
 const SelectedMatchup = () => {
   const location = useLocation();
   const { state } = location;
 
-  const [navigate, setNavigate] = useState(false);
+  const [navigate, setNavigate] = useState(false);  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [chosenMove, setChosenMove] = useState(null);
   const [data, setData] = useState(null);
   const [path, setPath] = useState("");
   const [selectedUserPokemon, setSelectedUserPokemon] = useState(defaultPokemon);
@@ -157,8 +160,14 @@ const SelectedMatchup = () => {
     console.log("user",user)
     setGlobalPokemonToExamine(user);
     setGlobalMoveToExamine(move);
-    setPath("/selectedMatchup/selectedMove");
-    setNavigate(true);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleMoveChosen = (move) => {
+    setChosenMove(move);   // do something with the move
+    setIsModalOpen(false); // close modal
   };
 
   const selectSpecie = (user, specie) => {
@@ -329,7 +338,12 @@ const SelectedMatchup = () => {
                   ))}
               </ul>
             </div>
-
+                  {isModalOpen && (
+        <MoveSelect
+          onClose={handleCloseModal}
+          onMoveSelect={handleMoveChosen}
+        />
+      )}
             <div className={"container"}>
               <div className={"horizontal-line"}></div>
             </div>

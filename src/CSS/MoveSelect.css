@@ -1,0 +1,74 @@
+.SelectedMove {
+  box-shadow: 0 0 10px yellow;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: #302B2B;
+  border: 2px solid white;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 400px;
+  max-height: 95vh;  
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.move-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.move-item {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+}
+
+.move-item:hover {
+  transform: scale(1.02);
+}
+
+.move-item strong {
+  display: block;
+  font-size: 1.1em;
+  margin-bottom: 4px;
+}
+
+.move-item.active {
+  border: 2px solid gold;
+}
+
+.modal-footer {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
