@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import "../CSS/Header.css";
-import { getL, swapLNG } from "../Composables/useLexicon";
+import { swapLNG } from "../Composables/useLexicon";
 
 const Header = ({ navBarBehaviour, reboot }) => {
   const location = useLocation();

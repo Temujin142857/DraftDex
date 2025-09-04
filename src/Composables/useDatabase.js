@@ -1,8 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
-import { createPokemonFromSnapshot } from "./usePokemon.js";
-import { Specie } from "../DataStructures/Specie.js";
 import { createTeamsFromSnapshot } from "./useTeams";
 import { addRoster, setUser, user as gUser } from "./useUser(lol)";
 import { User } from "../DataStructures/User";

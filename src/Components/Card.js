@@ -1,5 +1,4 @@
 // Card.js
-import React from "react";
 import "../CSS/Card.css"; // Import the CSS file
 
 const Card = ({ children, style }) => {

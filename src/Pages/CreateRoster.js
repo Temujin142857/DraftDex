@@ -1,8 +1,6 @@
 import React from "react";
 import { generateRosterID, loadTeams } from "../Composables/useDatabase.js";
-import { Link } from "react-router-dom";
 import "../CSS/CreateRoster.css";
-import { Specie } from "../DataStructures/Specie";
 import Header from "../Components/Header";
 import { loadAllSpecies } from "../Composables/useDatabase.js";
 import { saveARoster, saveGlobalTemporaryRoster } from "../Composables/useRosters";

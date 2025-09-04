@@ -1,19 +1,13 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import Card from "../Components/Card";
 import { useLocation } from "react-router-dom";
 import "../CSS/SelectedMatchup.css";
-import { Team } from "../DataStructures/Team.js";
-import { Pokemon } from "../DataStructures/Pokemon";
-import { Roster } from "../DataStructures/Roster";
 import NatureSelect from "../Components/NatureSelect";
 import ItemSelect from "../Components/ItemSelect";
 import { NavigateForwards, NavigateBackwards } from "../Navigator";
-import { set } from "firebase/database";
 import AbilitySelect from "../Components/AbilitySelect";
 import { calculateDamage } from "../Composables/useDamage";
 import Header from "../Components/Header";
-import { loadRoster } from "../Composables/useDatabase";
 import {
   loadARoster,
   globalEnemyRoster,

@@ -8,11 +8,9 @@ import {
 } from "./useDatabase";
 import { Roster } from "../DataStructures/Roster";
 import { loadASpecie } from "./useSpecies";
-import { Pokemon } from "../DataStructures/Pokemon";
 import { Team } from "../DataStructures/Team.js";
 import { Specie } from "../DataStructures/Specie.js";
 import { createPokemon } from "./usePokemon.js";
-import { loadMoveFromName } from "./useMoves.js";
 
 
 export let globalRosters = [];

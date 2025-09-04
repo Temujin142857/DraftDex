@@ -1,15 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Specie } from "../DataStructures/Specie";
-import { Pokemon } from "../DataStructures/Pokemon";
-import { loadTeams } from "../Composables/useDatabase";
-import { Link, useLocation } from "react-router-dom";
-import { Move } from "../DataStructures/Move";
-import { Roster } from "../DataStructures/Roster";
-import { NavigateBackwards } from "../Navigator";
+import { useState, useEffect } from "react";
 import "../CSS/MoveSelect.css";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Header from "./Header";
 import { saveARoster, rosterToJSON, rosterFromJSON, globalUserRoster, globalEnemyRoster } from "../Composables/useRosters";
 import { globalPokemonToExamine, pokemonFromJSON } from "../Composables/usePokemon";
 import { globalMoveToExamine } from "../Composables/useMoves";
