@@ -33,6 +33,7 @@ export const createPokemon = (
   ivs = [31, 31, 31, 31, 31, 31],
   item = null,
   level = 100,
+  statChanges = [0,0,0,0,0,0]
 ) => {
   let pokemon = new Pokemon(
     specie,
@@ -43,6 +44,7 @@ export const createPokemon = (
     ability,
     item,
     level,
+    statChanges
   );
 console.log("hi1,",pokemon, pokemon.specie instanceof Specie)
   if (pokemon.specie instanceof Specie && pokemon.specie.baseStats) {
@@ -88,6 +90,11 @@ export const setNature = (pokemon, nature) => {
   pokemon.nature = nature;
   updateNatureNums(pokemon);
 };
+
+export const setStatChange = (pokemon, statChange, index) =>{
+  pokemon.statChange[index]=statChange;
+  recalculateStat(pokemon, index);
+}
 
 export const updateNatureNums = (pokemon) => {
   const nature = pokemon.nature ? pokemon.nature.toLowerCase() : "";
@@ -191,10 +198,14 @@ export const recalculateStat = (pokemon, index, terrain) => {
           100 +
           5) *
           pokemon.natureNums[index],
-      )*1)//getAbilityMultiplyer(pokemon.ability, pokemon.item, index));
+      )*interpretStatChange(pokemon.statChanges[index]))//getAbilityMultiplyer(pokemon.ability, pokemon.item, index));
   }
   //put other ability modifiers here
 };
+
+const interpretStatChange=(statChange)=>{
+  return statChange>0 ? (2+statChange)/2: 2/(2+statChange);
+}
 
 
 const dealWithProtoDrive = (pokemon, terrain, weather)=>{
