@@ -2,8 +2,6 @@
 
 Selected different pokemon than the 6 breaks it -couldn't recreate
 Abilities affecting damage, currently they don't
-plus sign next to stats for stages
-fixing damage calc, right now it's slightly off
 letting abiltities/items affect pkm stats
 
 # Getting Started with Create React App
