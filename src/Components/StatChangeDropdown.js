@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-const StatChangeDropdown = () => {
-  const [selected, setSelected] = useState(0);
+const StatChangeDropdown = ({ selected = 0, onChange }) => {
   const [open, setOpen] = useState(false);
 
   const numbers = Array.from({ length: 13 }, (_, i) => i - 6);
 
-  const handleSelect = (value) => {
-    setSelected(value);
+  const handleSelect = (newValue) => {
+    if (onChange) onChange(newValue);
     setOpen(false);
   };
 
@@ -32,9 +31,10 @@ const StatChangeDropdown = () => {
         <div
           style={{
             position: 'absolute',
-            top: 0,
+            top: '50%',
+            transform: 'translateY(-50%)',
             left: 0,
-            width: '100%',
+            width: '150%',
             border: '1px solid #ccc',
             backgroundColor: 'white',
             zIndex: 1,

@@ -12,7 +12,6 @@ export function calculateDamage(
   critical = 1,
   other = 1,
   terrain = 1,
-  statBoosts=[]
 ) {
   if(move.category==="status"){return { min: 0, max: 0 };}
 
@@ -35,11 +34,11 @@ export function calculateDamage(
     );
   }
   let attackStat =
-    move.category === "Physical"
+    move.category.toLowerCase() === "physical"
       ? attackingPokemon.stats[1]
       : attackingPokemon.stats[3];
   let defenceStat =
-    move.category === "Physical"
+    move.category.toLowerCase() === "physical"
       ? defendingPokemon.stats[2]
       : defendingPokemon.stats[4];
 
@@ -49,12 +48,8 @@ export function calculateDamage(
   }
 
   let nonRandDmg =
-    Math.round(
-      (((2 * attackingPokemon.level) / 5 + 2) *
-        move.power *
-        (attackStat / defenceStat)) /
-        50 +
-        2,
+    (
+      getBaseDmg(attackingPokemon.level, move.power, attackStat, defenceStat)
     ) *
     targets *
     weather *
@@ -64,8 +59,24 @@ export function calculateDamage(
     stab *
     other *
     typeWeakness;
-  return { min: randmin * nonRandDmg, max: randmax * nonRandDmg };
+   // console.log("damageCalc summary",attackingPokemon, defendingPokemon, move, attackStat, defenceStat)
+    console.log("damgage calc flat:", move.name, randmin * nonRandDmg, randmax * nonRandDmg)
+  return { min: Math.floor(randmin * nonRandDmg), max: Math.floor(randmax * nonRandDmg)};
 }
+
+
+//These 2 functions I got straight from the pkm showdown calcutor's source code, and modified slightly
+//https://calc.pokemonshowdown.com
+function getBaseDmg(level, basePower, attack, defense){
+  return Math.floor((Math.floor(((Math.floor((2 * level) / 5 + 2) * basePower) * attack) / defense) / 50 + 2));
+}
+
+function pokeRound(num) {
+    return num % 1 > 0.5 ? Math.ceil(num) : Math.floor(num);
+}
+
+
+
 
 
 function getItemMulitplyer(item, move, typeWeakness){

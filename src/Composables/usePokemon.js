@@ -92,7 +92,7 @@ export const setNature = (pokemon, nature) => {
 };
 
 export const setStatChange = (pokemon, statChange, index) =>{
-  pokemon.statChange[index]=statChange;
+  pokemon.statChanges[index]=statChange;
   recalculateStat(pokemon, index);
 }
 

@@ -128,17 +128,17 @@ const SelectedMatchup = () => {
     }
   };
 
-    const handleStatChangeChange = (user, index, statChange, event) => {
+    const handleStatChangeChange = (user, index, statChange) => {
     if (user) {
       const newStatChanges = [...selectedUserPokemon.statChanges];
-      newStatChanges[index] = parseInt(event.target.value, 10);
+      newStatChanges[index] = parseInt(statChange, 10);
       const prevPokemon=JSON.parse(JSON.stringify(selectedUserPokemon));
       setStatChange(selectedUserPokemon, newStatChanges[index], index);
       setSelectedUserPokemon((prevState) => ({ ...prevState, statChanges: newStatChanges }));
       replacePokemon(globalUserRoster.teams[0],prevPokemon, selectedUserPokemon);
     } else {
       const newStatChanges = [...selectedEnemyPokemon.statChanges];
-      newStatChanges[index] = parseInt(event.target.value, 10);
+      newStatChanges[index] = parseInt(statChange, 10);
       const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
       setIv(selectedEnemyPokemon, newStatChanges[index], index);
       setSelectedEnemyPokemon((prevState) => ({ ...prevState, statChanges: newStatChanges }));
@@ -506,6 +506,21 @@ const SelectedMatchup = () => {
                         ))}
                     </ul>
                   </div>
+                  <div>
+                    <h2>+/-</h2>
+                    <ul style={{ listStyleType: "none", padding: 0, marginTop: "5px" }}>
+                      {selectedUserPokemon &&
+                        selectedUserPokemon.statChanges?.map((statChange, index) => (
+                          <li
+                            key={index}
+                            style={{ marginLeft: "10px", marginBottom: "15px", marginTop: "2px" }}
+                          >
+                            <StatChangeDropdown selected={statChange} onChange={(newStatChange)=>{handleStatChangeChange(true, index, newStatChange);}} />
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+
                   <div className="square-container">
                     <MoveItem
                       move={selectedUserPokemon.moves[0]}
@@ -660,7 +675,7 @@ const SelectedMatchup = () => {
                             key={index}
                             style={{ marginLeft: "10px", marginBottom: "15px", marginTop: "2px" }}
                           >
-                            <StatChangeDropdown/>
+                            <StatChangeDropdown selected={statChange} onChange={(newStatChange)=>{handleStatChangeChange(false, index, newStatChange);}} />
                           </li>
                         ))}
                     </ul>
