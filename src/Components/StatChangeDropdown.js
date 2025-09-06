@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const StatChangeDropdown = ({ selected = 0, onChange }) => {
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const numbers = Array.from({ length: 13 }, (_, i) => i - 6);
 
@@ -10,11 +11,30 @@ const StatChangeDropdown = ({ selected = 0, onChange }) => {
     setOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
+
+
   const above = numbers.filter((n) => n > selected).reverse();
   const below = numbers.filter((n) => n < selected);
 
   return (
-    <div style={{ width: '30px', margin: 'auto', position: 'relative', fontFamily: 'Arial' }}>
+    <div ref={dropdownRef} style={{ width: '30px', margin: 'auto', position: 'relative', fontFamily: 'Arial' }}>
       <div
         onClick={() => setOpen(!open)}
         style={{

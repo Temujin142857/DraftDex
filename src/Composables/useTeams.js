@@ -33,12 +33,10 @@ export const createTeamFromSnapshot = async (snapshot, species) => {
 export const createTeamsFromSnapshot = (snapshot) => {};
 
 export const createDefaultTeam=(speciesList)=>{
-  console.log("hi4",speciesList)
   let pokemons=[];
   for (let i = 0; i < speciesList.length&&i<6; i++) {
     pokemons.push(createPokemon(speciesList[i]));
   }
-  console.log("hi5", pokemons)
   return new Team("team1", pokemons)
 }
 

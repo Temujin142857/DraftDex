@@ -140,7 +140,7 @@ const SelectedMatchup = () => {
       const newStatChanges = [...selectedEnemyPokemon.statChanges];
       newStatChanges[index] = parseInt(statChange, 10);
       const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
-      setIv(selectedEnemyPokemon, newStatChanges[index], index);
+      setStatChange(selectedEnemyPokemon, newStatChanges[index], index);
       setSelectedEnemyPokemon((prevState) => ({ ...prevState, statChanges: newStatChanges }));
       replacePokemon(globalEnemyRoster.teams[0],prevPokemon, selectedEnemyPokemon);
     }
@@ -185,6 +185,7 @@ const SelectedMatchup = () => {
 
   const selectSpecie = (user, specie) => {
     const pokemonToAdd = createPokemon(specie);
+    console.log("hi", pokemonToAdd)
     if (user) {
       const alreadyExists = globalUserRoster.teams[0].pokemons.some(
         (pokemon) => pokemon.specie.name === pokemonToAdd.specie.name,

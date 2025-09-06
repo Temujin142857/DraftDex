@@ -96,7 +96,6 @@ export const createRosterFromSnapshot = async (snapshot, isShallow) => {
         console.log("hi03", teams[i])
       }    
     } else{
-      console.log("hi01", name)
       teams=[createDefaultTeam(species)];
     }
   }
