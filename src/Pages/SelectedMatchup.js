@@ -19,7 +19,7 @@ import {
   saveARoster
 } from "../Composables/useRosters";
 import { Ability } from "../DataStructures/Ability";
-import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON, defaultPokemon, createPokemon, jsonFromPartialObject, setGlobalPokemonToExamine, setStatChange } from "../Composables/usePokemon.js";
+import { setIv, setEv, setNature, pokemonToJSON, pokemonFromJSON, defaultPokemon, createPokemon, updateNatureNums, setGlobalPokemonToExamine, setStatChange, recalculateStat } from "../Composables/usePokemon.js";
 import { replacePokemon } from "../Composables/useTeams.js";
 import { setGlobalMoveToExamine } from "../Composables/useMoves.js";
 import MoveSelect from "../Components/MoveSelect.js"
@@ -83,32 +83,37 @@ const SelectedMatchup = () => {
 
 
   const handleNatureChange = (user, selectedOption) => {
-      // Assuming selectedUserPokemon and selectedEnemyPokemon are objects with a method to update nature
-      if (user && selectedUserPokemon) {
-        const prevPokemon=JSON.parse(JSON.stringify(selectedUserPokemon));
-        setNature(selectedUserPokemon, selectedOption.value);
-        setSelectedUserPokemon(selectedUserPokemon);
-        replacePokemon(globalUserRoster.teams[0],prevPokemon, selectedUserPokemon);
-      } else if (!user && selectedEnemyPokemon) {
-        const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
-        setNature(selectedEnemyPokemon, selectedOption.value);
-        setSelectedEnemyPokemon(selectedEnemyPokemon);
-        replacePokemon(globalEnemyRoster.teams[0],prevPokemon, selectedEnemyPokemon);
-      }
-    };
+    if (user && selectedUserPokemon) {
+      const prevPokemon = JSON.parse(JSON.stringify(selectedUserPokemon));
+      const updatedPokemon = { ...selectedUserPokemon, nature: selectedOption.value };
+      updateNatureNums(updatedPokemon);
+      setSelectedUserPokemon(updatedPokemon);
+      replacePokemon(globalUserRoster.teams[0], prevPokemon, updatedPokemon);
+    } else if (!user && selectedEnemyPokemon) {
+      const prevPokemon = JSON.parse(JSON.stringify(selectedEnemyPokemon));
+      const updatedPokemon = { ...selectedEnemyPokemon, nature: selectedOption.value };
+      updateNatureNums(updatedPokemon);
+      setSelectedEnemyPokemon(updatedPokemon);
+      replacePokemon(globalEnemyRoster.teams[0], prevPokemon, updatedPokemon);
+    }
+  };
+
 
 
     const handleItemChange = (selectedItem, user) => {
-      if(user){
-        const prevPokemon=JSON.parse(JSON.stringify(selectedUserPokemon));
-        selectedUserPokemon.item=selectedItem;
-        replacePokemon(globalUserRoster.teams[0],prevPokemon, selectedUserPokemon);
+      if (user) {
+        const prevPokemon = JSON.parse(JSON.stringify(selectedUserPokemon));
+        const updatedPokemon = { ...selectedUserPokemon, item: selectedItem };
+        setSelectedUserPokemon(updatedPokemon);
+        replacePokemon(globalUserRoster.teams[0], prevPokemon, updatedPokemon);
       } else {
-        const prevPokemon=JSON.parse(JSON.stringify(selectedEnemyPokemon));
-        selectedEnemyPokemon.item=selectedItem;
-        replacePokemon(globalEnemyRoster.teams[0],prevPokemon, selectedEnemyPokemon);
+        const prevPokemon = JSON.parse(JSON.stringify(selectedEnemyPokemon));
+        const updatedPokemon = { ...selectedEnemyPokemon, item: selectedItem };
+        setSelectedEnemyPokemon(updatedPokemon);
+        replacePokemon(globalEnemyRoster.teams[0], prevPokemon, updatedPokemon);
       }
     };
+
 
   const handleIVChange = (user, index, iv, event) => {
     if (user) {
@@ -149,7 +154,6 @@ const SelectedMatchup = () => {
   const handleEVChange = (user, index, ev, event) => {
     console.log("initial roster before change", globalUserRoster)
     if (user) {
-      console.log("event", event.target.value, "index:", index)
       const newEVs = [...selectedUserPokemon.evs];
       newEVs[index] = parseInt(event.target.value, 10);
       const prevPokemon=JSON.parse(JSON.stringify(selectedUserPokemon));
@@ -157,7 +161,6 @@ const SelectedMatchup = () => {
       setEv(selectedUserPokemon, newEVs[index], index);
       setSelectedUserPokemon((prevState) => ({ ...prevState, evs: newEVs }));
       replacePokemon(globalUserRoster.teams[0],prevPokemon, selectedUserPokemon);
-      console.log("after roster", globalUserRoster)
     } else {
       const newEVs = [...selectedEnemyPokemon.evs];
       newEVs[index] = parseInt(event.target.value, 10);
@@ -206,6 +209,7 @@ const SelectedMatchup = () => {
   };
 
   const dmgCalc = (move, min, user) => {
+    //console.log(move, selectedUserPokemon)
     if(!move){console.log("no move, damageCalc"); return 1;}
     let dmg = user
       ? calculateDamage(selectedUserPokemon, move, selectedEnemyPokemon)

@@ -191,6 +191,7 @@ export const recalculateStat = (pokemon, index, terrain) => {
       );
       break;
     default:
+      console.log("pokemon nature num",pokemon.specie.name,pokemon.natureNums[index]);
       pokemon.stats[index] = Math.floor(Math.floor(
         (((2 * pokemon.specie.baseStats[index] +
           pokemon.ivs[index] +

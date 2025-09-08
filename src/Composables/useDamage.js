@@ -14,7 +14,9 @@ export function calculateDamage(
   terrain = 1,
 ) {
   if(move.category==="status"){return { min: 0, max: 0 };}
-
+  if(attackingPokemon.item&&!item){
+    item=attackingPokemon.item;
+  }
   let isStab = attackingPokemon.specie?.types.some((type) => {
     return type === move?.type;
   }); 
@@ -41,8 +43,8 @@ export function calculateDamage(
     move.category.toLowerCase() === "physical"
       ? defendingPokemon.stats[2]
       : defendingPokemon.stats[4];
-
-  if(item instanceof Item){
+      
+  if(item && (item instanceof Item||(item.name&&item.multiplyer&&item.conditions))){
     console.log("item multiplyer", getItemMulitplyer(item, move, typeWeakness))
     other=other*getItemMulitplyer(item, move, typeWeakness);
   }
