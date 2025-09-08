@@ -31,7 +31,7 @@ const StatChangeDropdown = ({ selected = 0, onChange }) => {
 
 
   const above = numbers.filter((n) => n > selected).reverse();
-  const below = numbers.filter((n) => n < selected);
+  const below = numbers.filter((n) => n < selected).reverse();
 
   return (
     <div ref={dropdownRef} style={{ width: '30px', margin: 'auto', position: 'relative', fontFamily: 'Arial' }}>
