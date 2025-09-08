@@ -205,7 +205,7 @@ export const recalculateStat = (pokemon, index, terrain) => {
 };
 
 const interpretStatChange=(statChange)=>{
-  return statChange>0 ? (2+statChange)/2: 2/(2+statChange);
+  return statChange>0 ? (2+statChange)/2: 2/(2-statChange);
 }
 
 
