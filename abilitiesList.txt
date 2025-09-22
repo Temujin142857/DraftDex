@@ -1,13 +1,10 @@
+\\applies on attack
 technician
 swarm
-light metal/ heavy metal
-protosynthesis
 damp
--charge effect from electromophosis
 well baked body
 water absorb
 mold breaker
-liquid ooze?
 levitate
 overcoat
 water bubble
@@ -31,11 +28,9 @@ sharpness
 thick fat
 tera shell
 guts
-- the snow buff and other weather effects
 sheer force
 sand force
 storm drain
-zero to heatproof
 swarm
 tinted lens
 wind power -charge
@@ -50,3 +45,21 @@ marvel scale
 multi scale
 strong jaw
 blaze
+
+
+\\changes stat
+protosynthesis
+zero to hero
+
+\\otherwise used by moves in calculation
+light metal/ heavy metal
+
+
+-charge effect from electromophosis
+
+
+
+
+- the snow buff and other weather effects
+
+
