@@ -1,4 +1,5 @@
 import { Item } from "../DataStructures/Item";
+import { handleAbility } from "./AbiltiyEffectLookup";
 import { typeChartCheck } from "./TypeMatchupLookup";
 
 export function calculateDamage(
@@ -49,6 +50,8 @@ export function calculateDamage(
     console.log("item multiplyer", getItemMulitplyer(item, move, typeWeakness))
     other=other*getItemMulitplyer(item, move, typeWeakness);
   }
+
+  const abilityModifier=handleAbility(attackingPokemon.ability, {attackingPokemon, defendingPokemon, move, item, burn, screens, terrain});
 
   let nonRandDmg =
     (
